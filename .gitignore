@@ -46,6 +46,7 @@ next-env.d.ts
 # agents
 /.agent/
 /.agents/
+/.kiro/
 
 # local docs
 /PRD.md

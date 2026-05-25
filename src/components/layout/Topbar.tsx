@@ -1,25 +1,27 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Bell, Search, ChevronRight } from "lucide-react";
+import { Bell, Search, ChevronRight, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_SECTIONS } from "@/lib/navigation";
+import { ENTERPRISE_NAV, COMMUNITY_NAV } from "@/lib/navigation";
 
 interface TopbarProps {
   sidebarCollapsed: boolean;
+  onMobileToggle?: () => void;
 }
 
-export default function Topbar({ sidebarCollapsed }: TopbarProps) {
+export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps) {
   const pathname = usePathname();
 
   const getBreadcrumbs = () => {
     const segments = pathname.split("/").filter(Boolean);
     const crumbs: { label: string; href: string }[] = [];
 
+    const allSections = [...ENTERPRISE_NAV, ...COMMUNITY_NAV];
     let currentPath = "";
     for (const segment of segments) {
       currentPath += `/${segment}`;
-      const allItems = NAV_SECTIONS.flatMap((s) => s.items);
+      const allItems = allSections.flatMap((s) => s.items);
       const navItem = allItems.find((item) => item.href === currentPath);
       crumbs.push({
         label: navItem?.label || segment.charAt(0).toUpperCase() + segment.slice(1),
@@ -33,14 +35,20 @@ export default function Topbar({ sidebarCollapsed }: TopbarProps) {
 
   return (
     <header
-      className={cn(
-        "sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border-subtle bg-background/80 backdrop-blur-xl px-6 transition-all duration-300",
-        sidebarCollapsed ? "ml-[72px]" : "ml-[260px]"
-      )}
+      className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border-subtle bg-background/80 backdrop-blur-xl px-6 transition-all duration-300"
     >
-      {/* Breadcrumbs */}
-      <nav className="flex items-center gap-1.5 text-sm">
-        <span className="text-text-muted">Platform</span>
+      {/* Mobile Toggle & Breadcrumbs */}
+      <div className="flex items-center gap-3">
+        {onMobileToggle && (
+          <button
+            onClick={onMobileToggle}
+            className="md:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle bg-surface hover:bg-surface-raised transition-colors text-text-muted"
+          >
+            <Menu className="h-4 w-4" />
+          </button>
+        )}
+        <nav className="hidden md:flex items-center gap-1.5 text-sm">
+          <span className="text-text-muted">Platform</span>
         {breadcrumbs.map((crumb, i) => (
           <span key={crumb.href} className="flex items-center gap-1.5">
             <ChevronRight className="h-3.5 w-3.5 text-text-muted" />
@@ -55,12 +63,13 @@ export default function Topbar({ sidebarCollapsed }: TopbarProps) {
             </span>
           </span>
         ))}
-      </nav>
+        </nav>
+      </div>
 
       {/* Right Side */}
       <div className="flex items-center gap-3">
         {/* Search */}
-        <div className="relative">
+        <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <input
             type="text"

@@ -8,25 +8,50 @@ import {
   ChevronRight,
   Leaf,
   Sparkles,
+  Building2,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_SECTIONS, ECOBOT_NAV } from "@/lib/navigation";
+import { ECOBOT_NAV, type NavSection } from "@/lib/navigation";
 
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
   onEcoBotToggle: () => void;
+  sections: NavSection[];
+  mode: "enterprise" | "community";
+  mobileOpen?: boolean;
 }
 
-export default function Sidebar({ collapsed, onToggle, onEcoBotToggle }: SidebarProps) {
+export default function Sidebar({ collapsed, onToggle, onEcoBotToggle, sections, mode, mobileOpen = false }: SidebarProps) {
   const pathname = usePathname();
+
+  const modeConfig = {
+    enterprise: {
+      label: "Green Credit",
+      badge: "ENTERPRISE",
+      badgeColor: "text-accent",
+      icon: Building2,
+    },
+    community: {
+      label: "Green Credit",
+      badge: "COMMUNITY",
+      badgeColor: "text-cyan-400",
+      icon: Users,
+    },
+  };
+
+  const config = modeConfig[mode];
 
   return (
     <motion.aside
       initial={false}
       animate={{ width: collapsed ? 72 : 260 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed left-0 top-0 z-40 h-screen flex flex-col border-r border-border-subtle bg-surface overflow-hidden"
+      className={cn(
+        "fixed left-0 top-0 z-50 h-screen flex flex-col border-r border-border-subtle bg-surface overflow-hidden transition-transform md:translate-x-0",
+        mobileOpen ? "translate-x-0" : "-translate-x-full"
+      )}
     >
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 px-4 border-b border-border-subtle">
@@ -43,10 +68,10 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle }: Sidebar
               className="overflow-hidden whitespace-nowrap"
             >
               <h1 className="text-sm font-bold text-text-primary">
-                Green Credit
+                {config.label}
               </h1>
-              <p className="text-[10px] font-medium text-accent tracking-wider uppercase">
-                AI Platform
+              <p className={cn("text-[10px] font-semibold tracking-wider uppercase", config.badgeColor)}>
+                {config.badge}
               </p>
             </motion.div>
           )}
@@ -55,7 +80,7 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle }: Sidebar
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 no-scrollbar">
-        {NAV_SECTIONS.map((section) => (
+        {sections.map((section) => (
           <div key={section.title} className="mb-6">
             <AnimatePresence>
               {!collapsed && (
@@ -71,9 +96,11 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle }: Sidebar
             </AnimatePresence>
             <div className="space-y-1">
               {section.items.map((item) => {
-                const isActive = pathname === item.href || 
-                  (item.href !== "/home" && pathname.startsWith(item.href) && item.href !== "/enterprise") ||
-                  (item.href === "/enterprise" && pathname === "/enterprise");
+                const basePath = `/${mode}`;
+                const isExactDashboard = item.href === basePath && pathname === basePath;
+                const isSubPage = item.href !== basePath && pathname.startsWith(item.href);
+                const isActive = isExactDashboard || isSubPage;
+
                 return (
                   <Link
                     key={item.href}
