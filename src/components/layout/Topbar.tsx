@@ -35,34 +35,34 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
 
   return (
     <header
-      className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border-subtle bg-background/80 backdrop-blur-xl px-6 transition-all duration-300"
+      className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-white/[0.03] bg-[#09090b]/80 backdrop-blur-xl px-6 transition-all duration-300 font-sans text-text-primary antialiased"
     >
       {/* Mobile Toggle & Breadcrumbs */}
       <div className="flex items-center gap-3">
         {onMobileToggle && (
           <button
             onClick={onMobileToggle}
-            className="md:hidden flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle bg-surface hover:bg-surface-raised transition-colors text-text-muted"
+            className="md:hidden flex h-8 w-8 items-center justify-center rounded border border-white/[0.04] bg-[#0c0c0e] hover:bg-white/[0.02] transition-colors text-text-muted"
           >
             <Menu className="h-4 w-4" />
           </button>
         )}
-        <nav className="hidden md:flex items-center gap-1.5 text-sm">
-          <span className="text-text-muted">Platform</span>
-        {breadcrumbs.map((crumb, i) => (
-          <span key={crumb.href} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 text-text-muted" />
-            <span
-              className={cn(
-                i === breadcrumbs.length - 1
-                  ? "text-text-primary font-medium"
-                  : "text-text-muted"
-              )}
-            >
-              {crumb.label}
+        <nav className="hidden md:flex items-center gap-1.5 text-[12.5px] font-light uppercase tracking-wider text-text-muted">
+          <span>Platform</span>
+          {breadcrumbs.map((crumb, i) => (
+            <span key={crumb.href} className="flex items-center gap-1.5">
+              <ChevronRight className="h-3.5 w-3.5 text-text-muted opacity-60" />
+              <span
+                className={cn(
+                  i === breadcrumbs.length - 1
+                    ? "text-text-primary font-normal"
+                    : "text-text-muted"
+                )}
+              >
+                {crumb.label}
+              </span>
             </span>
-          </span>
-        ))}
+          ))}
         </nav>
       </div>
 
@@ -70,35 +70,35 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
       <div className="flex items-center gap-3">
         {/* Search */}
         <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-[15px] w-[15px] text-text-muted opacity-70" />
           <input
             type="text"
-            placeholder="Search..."
-            className="h-9 w-52 rounded-lg bg-surface border border-border-subtle pl-9 pr-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all"
+            placeholder="Search commands (⌘K)..."
+            className="h-9.5 w-60 rounded border border-white/[0.04] bg-[#0c0c0e] pl-10 pr-3 text-[13px] font-light text-text-primary placeholder:text-text-muted/70 focus:outline-none focus:border-accent/30 focus:ring-0 transition-colors"
           />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-text-muted font-mono bg-surface-raised px-1.5 py-0.5 rounded">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-text-muted font-mono bg-white/[0.03] border border-white/[0.04] px-1.5 py-0.5 rounded leading-none">
             ⌘K
           </kbd>
         </div>
 
         {/* Notifications */}
-        <button className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle bg-surface hover:bg-surface-raised transition-colors">
+        <button className="relative flex h-9.5 w-9.5 items-center justify-center rounded border border-white/[0.04] bg-[#0c0c0e] hover:bg-white/[0.02] transition-colors">
           <Bell className="h-4 w-4 text-text-secondary" />
-          <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-accent text-[10px] font-bold text-white flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-accent text-[9.5px] font-light text-white flex items-center justify-center border border-[#09090b]">
             3
           </span>
         </button>
 
         {/* User Avatar */}
-        <div className="flex items-center gap-2 ml-2 pl-3 border-l border-border-subtle">
-          <div className="h-8 w-8 rounded-lg gradient-green flex items-center justify-center text-white text-xs font-bold">
+        <div className="flex items-center gap-2 ml-2 pl-3 border-l border-white/[0.04]">
+          <div className="h-8 w-8 rounded bg-accent/5 border border-accent/15 flex items-center justify-center text-accent text-[12px] font-normal tracking-wide">
             SB
           </div>
-          <div className="hidden lg:block">
-            <p className="text-sm font-medium text-text-primary leading-none">
+          <div className="hidden lg:block text-left">
+            <p className="text-[13px] font-normal text-text-primary leading-none">
               Shivam B.
             </p>
-            <p className="text-[11px] text-text-muted mt-0.5">Admin</p>
+            <p className="text-[11px] text-text-muted font-light mt-0.5 uppercase tracking-wider">Admin</p>
           </div>
         </div>
       </div>

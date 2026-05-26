@@ -30,12 +30,12 @@ export default function EnterpriseLayout({ children }: { children: React.ReactNo
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <div className={cn("flex flex-col min-h-screen transition-all duration-300", sidebarCollapsed ? "md:ml-[72px]" : "md:ml-[260px]")}>
+      <div className={cn("flex flex-col min-h-screen transition-all duration-300", sidebarCollapsed ? "md:ml-[80px]" : "md:ml-[288px]")}>
         <Topbar 
           sidebarCollapsed={sidebarCollapsed} 
           onMobileToggle={() => setMobileOpen(!mobileOpen)} 
         />
-        <main className="flex-1 p-6 w-full max-w-full overflow-x-hidden">
+        <main className="flex-1 p-8 w-full max-w-full overflow-x-hidden">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
             {children}
           </motion.div>

@@ -47,8 +47,10 @@ next-env.d.ts
 /.agent/
 /.agents/
 /.kiro/
+/public/skills/
 
 # local docs
 /PRD.md
 /techstack.md
 
+/bun.lock

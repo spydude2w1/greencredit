@@ -15,39 +15,39 @@ interface MetricCardProps {
 export function MetricCard({ label, value, change, icon, className, delay = 0 }: MetricCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay }}
+      transition={{ duration: 0.35, delay }}
       className={cn(
-        "relative overflow-hidden rounded-xl border border-border-subtle bg-surface p-5 card-hover",
+        "relative overflow-hidden rounded border border-white/[0.03] bg-[#0c0c0e]/80 p-6 transition-colors",
         className
       )}
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-xs font-medium text-text-muted uppercase tracking-wider">
+          <p className="text-[11px] font-light text-text-muted uppercase tracking-widest">
             {label}
           </p>
-          <p className="mt-2 text-2xl font-bold text-text-primary stat-number">
+          <p className="mt-2.5 text-3xl font-light font-mono text-text-primary tracking-tight">
             {value}
           </p>
           {change !== undefined && change !== 0 && (
             <p
               className={cn(
-                "mt-1 text-xs font-medium",
-                change > 0 ? "text-accent" : "text-danger"
+                "mt-1.5 text-[12px] font-light tracking-wide",
+                change > 0 ? "text-accent/90" : "text-danger/90"
               )}
             >
-              {change > 0 ? "↑" : "↓"} {Math.abs(change)}% vs last month
+              {change > 0 ? "↑" : "↓"} {Math.abs(change)}% vs last period
             </p>
           )}
         </div>
         {icon && (
-          <span className="text-2xl">{icon}</span>
+          <span className="text-2xl opacity-80 shrink-0 select-none">{icon}</span>
         )}
       </div>
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 gradient-radial-green opacity-30 pointer-events-none" />
+      {/* Subtle background glow overlay */}
+      <div className="absolute inset-0 bg-radial-[at_0%_0%] from-accent/[0.015] to-transparent pointer-events-none" />
     </motion.div>
   );
 }
@@ -64,17 +64,17 @@ export function ScoreGauge({ score, maxScore = 850, label, size = "md", classNam
   const percentage = (score / maxScore) * 100;
   const circumference = 2 * Math.PI * 45;
   const strokeDashoffset = circumference - (percentage / 100) * circumference * 0.75;
-  const sizes = { sm: 120, md: 180, lg: 240 };
+  const sizes = { sm: 135, md: 190, lg: 270 };
   const dim = sizes[size];
 
   const getColor = () => {
-    if (percentage >= 80) return "#22c55e";
+    if (percentage >= 80) return "#32ff58";
     if (percentage >= 60) return "#f59e0b";
     return "#ef4444";
   };
 
   return (
-    <div className={cn("flex flex-col items-center", className)}>
+    <div className={cn("flex flex-col items-center select-none", className)}>
       <div className="relative" style={{ width: dim, height: dim }}>
         <svg
           viewBox="0 0 100 100"
@@ -87,8 +87,8 @@ export function ScoreGauge({ score, maxScore = 850, label, size = "md", classNam
             cy="50"
             r="45"
             fill="none"
-            stroke="#27272a"
-            strokeWidth="6"
+            stroke="#161619"
+            strokeWidth="5"
             strokeLinecap="round"
             strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
           />
@@ -99,29 +99,28 @@ export function ScoreGauge({ score, maxScore = 850, label, size = "md", classNam
             r="45"
             fill="none"
             stroke={getColor()}
-            strokeWidth="6"
+            strokeWidth="5"
             strokeLinecap="round"
             strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
             initial={{ strokeDashoffset: circumference * 0.75 }}
             animate={{ strokeDashoffset }}
-            transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
             style={{
-              filter: `drop-shadow(0 0 8px ${getColor()}40)`,
+              filter: `drop-shadow(0 0 6px ${getColor()}25)`,
             }}
           />
         </svg>
-        {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <motion.span
-            className="text-3xl font-bold stat-number text-text-primary"
-            initial={{ opacity: 0, scale: 0.5 }}
+            className="text-3xl font-light font-mono text-text-primary tracking-tight"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
+            transition={{ duration: 0.3, delay: 0.4 }}
           >
             {score}
           </motion.span>
           {label && (
-            <span className="text-xs text-text-muted mt-1">{label}</span>
+            <span className="text-[11px] text-text-muted font-light mt-0.5 tracking-wider uppercase">{label}</span>
           )}
         </div>
       </div>
@@ -140,35 +139,35 @@ interface InsightCardProps {
 
 export function InsightCard({ title, description, severity, category, action, delay = 0 }: InsightCardProps) {
   const severityColors: Record<string, string> = {
-    high: "bg-danger/10 text-danger border-danger/20",
-    medium: "bg-warning/10 text-warning border-warning/20",
-    low: "bg-accent/10 text-accent border-accent/20",
+    high: "bg-danger/5 text-danger/90 border-danger/15",
+    medium: "bg-warning/5 text-warning/90 border-warning/15",
+    low: "bg-accent/5 text-accent/95 border-accent/15",
   };
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -10 }}
+      initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3, delay }}
-      className="flex items-start gap-3 p-4 rounded-xl border border-border-subtle bg-surface hover:bg-surface-raised transition-colors"
+      transition={{ duration: 0.25, delay }}
+      className="flex items-start gap-4 p-4 rounded border border-white/[0.03] bg-[#09090b] hover:border-accent/15 transition-colors"
     >
       <span
         className={cn(
-          "shrink-0 text-[10px] font-bold uppercase px-2 py-1 rounded-md border",
+          "shrink-0 text-[9.5px] font-normal uppercase px-2 py-0.5 rounded border tracking-wider",
           severityColors[severity] || severityColors.low
         )}
       >
         {severity}
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-text-primary">{title}</p>
-        <p className="text-xs text-text-muted mt-1 line-clamp-2">{description}</p>
+        <p className="text-[13.5px] font-normal text-text-primary tracking-tight leading-tight">{title}</p>
+        <p className="text-[12px] text-text-muted font-light mt-1.5 line-clamp-2 leading-relaxed">{description}</p>
         <div className="flex items-center gap-2 mt-2">
-          <span className="text-[10px] px-2 py-0.5 rounded bg-surface-raised text-text-muted">
+          <span className="text-[10px] px-2 py-0.5 rounded bg-white/[0.02] border border-white/[0.03] text-text-muted font-light uppercase tracking-wider">
             {category}
           </span>
           {action && (
-            <button className="text-[11px] font-medium text-accent hover:underline">
+            <button className="text-[11px] font-normal text-accent/80 hover:text-accent hover:underline transition-colors ml-auto">
               {action} →
             </button>
           )}

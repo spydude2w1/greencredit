@@ -5,20 +5,26 @@ import { motion } from "framer-motion";
 import {
   Leaf, ArrowRight, Building2, Users, BarChart3, ShieldAlert,
   FileText, Truck, Trophy, ShoppingBag, Bot, Sparkles,
-  Calculator, Search, Shield, Eye, Zap, Lock,
-  Globe, Brain, Fingerprint, Heart,
+  Calculator, Search, Database, Cpu, TrendingDown, Coins, Zap
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import LiquidEther from "@/components/reactbits/LiquidEther";
-import BorderGlow from "@/components/reactbits/BorderGlow";
-import PillNav from "@/components/reactbits/PillNav";
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { Header } from "@/components/ui/header-3";
+import ACTRMEngine from "@/components/landing/ACTRMEngine";
 import { Marquee } from "@/components/magicui/marquee";
-import { ShinyText } from "@/components/reactbits/shiny-text";
-import { WordFadeIn } from "@/components/reactbits/word-fade-in";
+import Beams from "@/components/reactbits/Beams";
+import BorderGlow from "@/components/ui/BorderGlow";
+
+/* ─── Data ─── */
+
+const actrmSteps = [
+  { letter: "A", name: "Aggregate", icon: Database, desc: "Ingest supplier invoices, ESG documents, transport logs, and sustainability records from across your value chain." },
+  { letter: "C", name: "Calculate", icon: Cpu, desc: "AI carbon engine analyzes Scope 1/2/3 emissions with lifecycle mapping and confidence scoring." },
+  { letter: "T", name: "Track", icon: BarChart3, desc: "Real-time dashboards with ESG scores, compliance status, and emissions trend analytics." },
+  { letter: "R", name: "Reduce", icon: TrendingDown, desc: "AI recommendations for low-emission alternatives, supplier switches, and reduction pathways." },
+  { letter: "M", name: "Monetize", icon: Coins, desc: "Earn Green Credits, blockchain-backed verification, and sustainability trust scoring." },
+];
 
 const enterpriseFeatures = [
-  { icon: FileText, label: "ESG Report Agent", desc: "Autonomous AI agent for BRSR/GRI compliance" },
+  { icon: FileText, label: "ESG Report Agent", desc: "Autonomous BRSR/GRI compliance" },
   { icon: BarChart3, label: "Carbon Analysis", desc: "Scope 1/2/3 lifecycle assessment" },
   { icon: Truck, label: "Supplier Intelligence", desc: "Vendor verification & risk scoring" },
   { icon: ShieldAlert, label: "Greenwash Detection", desc: "AI-powered claim verification" },
@@ -31,173 +37,306 @@ const communityFeatures = [
   { icon: Bot, label: "EcoBot AI", desc: "Personal sustainability assistant" },
 ];
 
-const trustBadges = [
-  { icon: Globe, label: "100% Free", desc: "For everyone" },
-  { icon: Brain, label: "AI-Powered", desc: "Smart & reliable" },
-  { icon: Eye, label: "Transparent", desc: "Data you can trust" },
-  { icon: Fingerprint, label: "Privacy First", desc: "Your data stays yours" },
-  { icon: Heart, label: "Impact Driven", desc: "For a sustainable future" },
+const capabilities = [
+  "Scope 3 Intelligence",
+  "ESG Automation",
+  "Greenwashing Detection",
+  "AI Sustainability Agents",
+  "Edge AI",
+  "BRSR Compliance",
+  "Carbon Analytics",
+  "Value Chain Mapping",
 ];
+
+/* ─── Animations ─── */
+
+const fadeUp: any = {
+  initial: { opacity: 0, y: 16 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.5, ease: "easeOut" },
+};
+
+const stagger: any = {
+  initial: { opacity: 0, y: 12 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+};
+
+/* ─── Page ─── */
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* ─── Navbar ─── */}
-      <PillNav
-        logo={<Leaf className="h-5 w-5 text-accent" />}
-        logoAlt="Green Credit AI Logo"
-        items={[
-          { label: 'Platforms', href: '#platforms' },
-          { label: 'Public Tools', href: '#tools' },
-          { label: 'About', href: '#about' }
-        ]}
-        activeHref="#platforms"
-        baseColor="#22c55e"
-        pillColor="#18181b"
-        hoveredPillTextColor="#18181b"
-        pillTextColor="#fafafa"
-      />
+    <div className="min-h-screen bg-background relative font-sans text-text-primary antialiased">
+      <Header />
 
-      {/* ─── Hero ─── */}
-      <section className="relative pt-32 pb-20 overflow-hidden min-h-[80vh] flex flex-col justify-center">
-        <div className="absolute inset-0 z-0">
-          <LiquidEther 
-            colors={['#22c55e', '#16a34a', '#4ade80']} 
-            mouseForce={30} 
-            cursorSize={150} 
-            autoSpeed={0.3} 
+      {/* ═══ HERO ═══ */}
+      <section className="relative min-h-screen flex items-center overflow-hidden">
+        {/* Background layers */}
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-45">
+          <Beams
+            beamWidth={2.5}
+            beamHeight={16}
+            beamNumber={14}
+            lightColor="#22c55e"
+            speed={1.0}
+            noiseIntensity={1.4}
+            scale={0.2}
+            rotation={12}
           />
         </div>
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }} 
-            animate={{ opacity: 1, y: 0 }} 
-            transition={{ duration: 0.6 }}
-            className="flex flex-col md:flex-row items-center justify-between gap-12 text-center md:text-left"
-          >
-            <div className="flex-1">
-              <div className="text-left">
-                <div className="inline-block">
-                  <WordFadeIn words="Sustainability Intelligence" className="text-5xl md:text-6xl lg:text-7xl font-bold text-text-primary leading-[1.1] tracking-tight m-0 inline" />
-                </div>
-                <span className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] tracking-tight m-0 ml-3 inline-block">
-                  <ShinyText text="Powered by AI" shimmerWidth={200} className="text-accent inline-block" />
+        <div className="absolute inset-0 grid-topology opacity-25 z-1" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-radial-[at_70%_30%] from-accent/[0.02] to-transparent z-1" />
+        <div className="absolute inset-0 scan-overlay pointer-events-none z-1" />
+
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-32 pb-24">
+          <div className="flex flex-col lg:flex-row items-center gap-20 lg:gap-24">
+            
+            {/* Left — Messaging */}
+            <div className="flex-1 max-w-2xl">
+              {/* Pre-headline */}
+              <motion.div
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center gap-2 mb-4"
+              >
+                <span className="pulse-dot" />
+                <span className="text-[9.5px] font-normal text-accent uppercase tracking-[0.25em] opacity-90">
+                  ACTRM Sustainability OS
                 </span>
-              </div>
-              <p className="mt-8 text-lg text-text-secondary max-w-2xl leading-relaxed mx-auto md:mx-0">
-                Enterprise ESG compliance, carbon analytics, and greenwashing detection — combined with
-                community-driven sustainability engagement. One platform, two experiences.
-              </p>
+              </motion.div>
+
+              {/* Headline */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-[1.08] tracking-tight mb-6"
+              >
+                <span className="text-gradient-operational">From Scope 3 Blindness</span>
+                <br />
+                <span className="text-gradient-green font-semibold">to AI Sustainability Intelligence</span>
+              </motion.h1>
+
+              {/* Subheadline */}
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.25 }}
+                className="text-[13.5px] sm:text-[14.5px] text-text-secondary font-light leading-relaxed max-w-xl mb-8 opacity-80"
+              >
+                Aggregate, Calculate, Track, Reduce, and Monetize environmental impact 
+                using autonomous, enterprise-grade sustainability intelligence systems.
+              </motion.p>
+
+              {/* CTAs */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35 }}
+                className="flex flex-wrap items-center gap-4 mb-10"
+              >
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 px-4.5 py-2 rounded gradient-green text-white text-[11.5px] font-normal tracking-wide hover:opacity-95 transition-opacity"
+                >
+                  Launch Platform <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <a
+                  href="#actrm"
+                  className="inline-flex items-center gap-2 px-4.5 py-2 rounded border border-white/[0.04] bg-white/[0.02] text-text-secondary text-[11.5px] font-normal tracking-wide hover:text-text-primary hover:bg-white/[0.04] transition-colors"
+                >
+                  Explore ACTRM Engine
+                </a>
+              </motion.div>
+
+              {/* Capability Strip */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex flex-wrap items-center gap-x-3.5 gap-y-2 text-[11px] text-text-muted tracking-widest uppercase font-light"
+              >
+                {["Scope 3 Intelligence", "ESG Automation", "Greenwash Detection", "AI Agents", "Edge AI"].map(
+                  (cap, i, arr) => (
+                    <span key={cap} className="flex items-center gap-2.5">
+                      {cap}
+                      {i < arr.length - 1 && <span className="pulse-dot !w-[3px] !h-[3px] !animation-none opacity-20" />}
+                    </span>
+                  )
+                )}
+              </motion.div>
             </div>
-            <div className="flex flex-col items-center justify-center gap-6 shrink-0 mt-10 md:mt-0 min-w-[240px]">
-              <Link href="/login" className="w-full">
-                <ShimmerButton className="shadow-2xl h-[56px] px-8 w-full" shimmerColor="#4ade80" background="linear-gradient(135deg, #22c55e 0%, #15803d 100%)">
-                  <span className="flex items-center justify-center gap-2 text-base font-semibold text-white w-full">
-                    Get Started <ArrowRight className="h-4 w-4" />
-                  </span>
-                </ShimmerButton>
-              </Link>
-              <a href="#platforms" className="w-full text-center px-8 py-4 rounded-xl border border-border-subtle bg-surface text-text-primary font-semibold hover:bg-surface-raised transition-colors text-base">
-                Explore Platforms
-              </a>
-            </div>
-          </motion.div>
+
+            {/* Right — ACTRM Engine */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
+              className="w-full lg:w-auto shrink-0 z-10"
+            >
+              <ACTRMEngine />
+            </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* ─── Two Platforms Section ─── */}
-      <section id="platforms" className="py-20 border-t border-border-subtle">
+      {/* Glow divider */}
+      <div className="glow-line-h w-full opacity-60" />
+
+      {/* ═══ ACTRM BREAKDOWN ═══ */}
+      <section id="actrm" className="py-24 relative bg-[#09090b]">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <p className="text-[10px] font-normal text-accent uppercase tracking-[0.25em] mb-4">
+              The Framework
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light text-text-primary tracking-tight">
+              ACTRM Sustainability Intelligence
+            </h2>
+            <p className="text-text-secondary mt-4 max-w-lg mx-auto text-[13px] font-light leading-relaxed opacity-95">
+              Five operational stages that transform raw environmental data into verified, monetizable sustainability outcomes.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {actrmSteps.map((step, i) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={step.letter}
+                  {...stagger}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="card-operational p-6 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center gap-3 mb-4">
+                      <span className="h-7 w-7 rounded bg-accent/5 border border-accent/15 flex items-center justify-center text-[10px] font-medium text-accent">
+                        {step.letter}
+                      </span>
+                      <span className="text-[13px] font-medium text-text-primary tracking-tight">{step.name}</span>
+                    </div>
+                    <p className="text-[11.5px] text-text-secondary leading-relaxed font-light">
+                      {step.desc}
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-white/[0.02] flex items-center gap-1.5">
+                    <Icon className="h-3 w-3 text-accent/50" />
+                    <span className="text-[9px] text-text-muted font-mono tracking-wider">stage {i + 1}/5</span>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <div className="glow-line-h w-full opacity-60" />
+
+      {/* ═══ TWO PLATFORMS ═══ */}
+      <section id="platforms" className="py-24 bg-[#09090b]">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-light text-text-primary tracking-tight">
               Two Platforms, One Mission
             </h2>
-            <p className="text-text-secondary mt-3 max-w-xl mx-auto">
+            <p className="text-text-secondary mt-4 max-w-xl mx-auto text-[13px] font-light leading-relaxed opacity-95">
               Enterprise-grade sustainability intelligence and community-driven environmental engagement — designed for different users, united by impact.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Enterprise Card */}
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Enterprise */}
+            <motion.div {...stagger} transition={{ duration: 0.5 }}>
               <BorderGlow
-                className="rounded-2xl bg-surface p-8 card-hover h-full w-full"
-                backgroundColor="#09090b"
-                glowColor="142 76 36" // green color roughly matching #22c55e
-                colors={['#22c55e', '#3b82f6', '#4ade80']}
-                animated={true}
+                className="h-full w-full"
+                edgeSensitivity={30}
+                glowColor="142 76 36"
+                backgroundColor="rgba(24, 24, 27, 0.5)"
+                borderRadius={12}
+                glowRadius={30}
+                glowIntensity={0.8}
+                coneSpread={20}
+                colors={['#10b981', '#34d399', '#059669']}
               >
-                <div className="absolute top-0 right-0 w-40 h-40 gradient-radial-green opacity-40 pointer-events-none" />
-                <div className="relative">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-xl gradient-green flex items-center justify-center">
-                      <Building2 className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-text-primary">Enterprise Platform</h3>
-                      <p className="text-xs text-accent font-semibold">B2B Intelligence</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-text-secondary mb-6">
-                    For companies, schools, suppliers, and organizations. Automate ESG reporting, analyze Scope 3 emissions, detect greenwashing, and manage supply chain sustainability.
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    {enterpriseFeatures.map((f) => (
-                      <div key={f.label} className="flex items-start gap-2.5 p-3 rounded-lg bg-background border border-border-subtle">
-                        <f.icon className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-xs font-semibold text-text-primary">{f.label}</p>
-                          <p className="text-[10px] text-text-muted mt-0.5">{f.desc}</p>
-                        </div>
+                <div className="p-8 relative overflow-hidden flex flex-col justify-between h-full">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-radial-[at_100%_0%] from-accent/[0.04] to-transparent pointer-events-none" />
+                  <div className="relative">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-9 w-9 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
+                        <Building2 className="h-4.5 w-4.5 text-accent opacity-90" />
                       </div>
-                    ))}
+                      <div>
+                        <h3 className="text-base font-medium text-text-primary tracking-tight">Enterprise Platform</h3>
+                        <p className="text-[8px] text-accent/80 font-normal uppercase tracking-wider mt-0.5">B2B Intelligence</p>
+                      </div>
+                    </div>
+                    <p className="text-[13px] text-text-secondary font-light leading-relaxed mb-6">
+                      For companies, schools, suppliers, and organizations. Automate ESG reporting, analyze Scope 3 emissions, detect greenwashing, and manage supply chain sustainability.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      {enterpriseFeatures.map((f) => (
+                        <div key={f.label} className="flex items-start gap-2.5 p-3.5 rounded bg-[#0c0c0e] border border-white/[0.03]">
+                          <f.icon className="h-3.5 w-3.5 text-accent/70 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-[11px] font-medium text-text-primary tracking-tight">{f.label}</p>
+                            <p className="text-[9px] text-text-muted font-light mt-0.5 leading-normal">{f.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <Link href="/login" className="inline-flex items-center gap-1 text-[12px] font-normal text-accent hover:underline tracking-wide">
+                      Enter Enterprise <ArrowRight className="h-3 w-3" />
+                    </Link>
                   </div>
-                  <Link href="/login" className="flex items-center gap-2 text-sm font-semibold text-accent hover:underline mt-auto pt-2">
-                    Enter Enterprise <ArrowRight className="h-4 w-4" />
-                  </Link>
                 </div>
               </BorderGlow>
             </motion.div>
 
-            {/* Community Card */}
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-              className="h-full">
+            {/* Community */}
+            <motion.div {...stagger} transition={{ duration: 0.5, delay: 0.1 }}>
               <BorderGlow
-                className="rounded-2xl bg-surface p-8 card-hover h-full w-full"
-                backgroundColor="#09090b"
-                glowColor="188 95 35" // cyan color roughly matching #06b6d4
-                colors={['#06b6d4', '#22c55e', '#67e8f9']}
-                animated={true}
+                className="h-full w-full"
+                edgeSensitivity={30}
+                glowColor="187 80 40"
+                backgroundColor="rgba(24, 24, 27, 0.5)"
+                borderRadius={12}
+                glowRadius={30}
+                glowIntensity={0.8}
+                coneSpread={20}
+                colors={['#06b6d4', '#22d3ee', '#0891b2']}
               >
-                <div className="absolute top-0 right-0 w-40 h-40 gradient-radial-green opacity-40 pointer-events-none" />
-                <div className="relative">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="h-12 w-12 rounded-xl bg-cyan-500 flex items-center justify-center">
-                      <Users className="h-6 w-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-text-primary">Community Platform</h3>
-                      <p className="text-xs text-cyan-400 font-semibold">B2C Engagement</p>
-                    </div>
-                  </div>
-                  <p className="text-sm text-text-secondary mb-6">
-                    For individuals, students, and eco-enthusiasts. Track your carbon footprint, earn green credits, join challenges, shop verified eco products, and learn about sustainability.
-                  </p>
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    {communityFeatures.map((f) => (
-                      <div key={f.label} className="flex items-start gap-2.5 p-3 rounded-lg bg-background border border-border-subtle">
-                        <f.icon className="h-4 w-4 text-cyan-400 shrink-0 mt-0.5" />
-                        <div>
-                          <p className="text-xs font-semibold text-text-primary">{f.label}</p>
-                          <p className="text-[10px] text-text-muted mt-0.5">{f.desc}</p>
-                        </div>
+                <div className="p-8 relative overflow-hidden flex flex-col justify-between h-full">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-radial-[at_100%_0%] from-cyan-500/[0.04] to-transparent pointer-events-none" />
+                  <div className="relative">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="h-9 w-9 rounded bg-cyan-500/5 border border-cyan-500/15 flex items-center justify-center">
+                        <Users className="h-4.5 w-4.5 text-cyan-400 opacity-90" />
                       </div>
-                    ))}
+                      <div>
+                        <h3 className="text-base font-medium text-text-primary tracking-tight">Community Platform</h3>
+                        <p className="text-[8px] text-cyan-400 font-normal uppercase tracking-wider mt-0.5">B2C Engagement</p>
+                      </div>
+                    </div>
+                    <p className="text-[13px] text-text-secondary font-light leading-relaxed mb-6">
+                      For individuals, students, and eco-enthusiasts. Track your carbon footprint, earn green credits, join challenges, shop verified eco products, and learn about sustainability.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 mb-6">
+                      {communityFeatures.map((f) => (
+                        <div key={f.label} className="flex items-start gap-2.5 p-3.5 rounded bg-[#0c0c0e] border border-white/[0.03]">
+                          <f.icon className="h-3.5 w-3.5 text-cyan-400/80 shrink-0 mt-0.5" />
+                          <div>
+                            <p className="text-[11px] font-medium text-text-primary tracking-tight">{f.label}</p>
+                            <p className="text-[9px] text-text-muted font-light mt-0.5 leading-normal">{f.desc}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <Link href="/login" className="inline-flex items-center gap-1 text-[12px] font-normal text-cyan-400 hover:underline tracking-wide">
+                      Enter Community <ArrowRight className="h-3 w-3" />
+                    </Link>
                   </div>
-                  <Link href="/login" className="flex items-center gap-2 text-sm font-semibold text-cyan-400 hover:underline mt-auto pt-2">
-                    Enter Community <ArrowRight className="h-4 w-4" />
-                  </Link>
                 </div>
               </BorderGlow>
             </motion.div>
@@ -205,109 +344,99 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ─── Public Tools ─── */}
-      <section id="tools" className="py-20 border-t border-border-subtle">
+      <div className="glow-line-h w-full opacity-60" />
+
+      {/* ═══ PUBLIC TOOLS ═══ */}
+      <section id="tools" className="py-24 bg-[#09090b]">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary">
-              Public Tools — Available for Everyone
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-light text-text-primary tracking-tight">
+              Public Intelligence Tools
             </h2>
-            <p className="text-text-secondary mt-3 max-w-lg mx-auto">
+            <p className="text-text-secondary mt-4 max-w-lg mx-auto text-[13px] font-light leading-relaxed opacity-95">
               Open access tools to promote transparency and awareness. Sign up to unlock full AI-powered features.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {/* Carbon Footprint Analyzer */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
-              className="rounded-2xl border border-border-subtle bg-surface p-8 relative overflow-hidden group card-hover">
-              <div className="absolute -right-6 -bottom-6 h-32 w-32 rounded-full bg-accent/5 group-hover:bg-accent/10 transition-colors" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-11 w-11 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center">
-                    <Calculator className="h-5 w-5 text-accent" />
+            {/* Carbon Analyzer */}
+            <motion.div {...stagger} transition={{ duration: 0.4 }} className="card-operational p-8 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3.5 mb-5">
+                  <div className="h-9 w-9 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
+                    <Calculator className="h-4.5 w-4.5 text-accent opacity-90" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-text-primary">Carbon Footprint Analyzer</h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/20">Public Tool</span>
+                    <h3 className="text-[15px] font-medium text-text-primary tracking-tight">Carbon Footprint Analyzer</h3>
+                    <span className="text-[7px] font-normal px-2 py-0.5 rounded bg-accent/5 text-accent/80 border border-accent/10 uppercase tracking-widest inline-block mt-0.5">Public</span>
                   </div>
                 </div>
-                <p className="text-sm text-text-secondary mb-5">
+                <p className="text-[13px] text-text-secondary font-light leading-relaxed mb-6">
                   Calculate your carbon footprint across travel, energy, waste, lifestyle and more. Get AI-powered reduction recommendations.
                 </p>
-                <Link href="/tools/carbon-calculator" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg gradient-green text-white text-sm font-semibold hover:opacity-90 transition-opacity">
-                  Analyze Now <ArrowRight className="h-4 w-4" />
-                </Link>
               </div>
+              <Link href="/tools/carbon-calculator" className="inline-flex items-center gap-2 px-4 py-2 rounded border border-white/[0.04] bg-white/[0.02] text-text-secondary text-[11.5px] font-normal tracking-wide hover:text-text-primary hover:bg-white/[0.04] transition-colors w-fit">
+                Analyze Now <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </motion.div>
 
             {/* Greenwash Detector */}
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}
-              className="rounded-2xl border border-border-subtle bg-surface p-8 relative overflow-hidden group card-hover">
-              <div className="absolute -right-6 -bottom-6 h-32 w-32 rounded-full bg-danger/5 group-hover:bg-danger/10 transition-colors" />
-              <div className="relative">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="h-11 w-11 rounded-xl bg-danger/10 border border-danger/20 flex items-center justify-center">
-                    <Search className="h-5 w-5 text-danger" />
+            <motion.div {...stagger} transition={{ duration: 0.4, delay: 0.08 }} className="card-operational p-8 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-3.5 mb-5">
+                  <div className="h-9 w-9 rounded bg-danger/5 border border-danger/15 flex items-center justify-center">
+                    <Search className="h-4.5 w-4.5 text-danger opacity-90" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-text-primary">Greenwash Detector</h3>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">Public Tool</span>
+                    <h3 className="text-[15px] font-medium text-text-primary tracking-tight">Greenwash Detector</h3>
+                    <span className="text-[7px] font-normal px-2 py-0.5 rounded bg-danger/5 text-danger/80 border border-danger/10 uppercase tracking-widest inline-block mt-0.5">Public</span>
                   </div>
                 </div>
-                <p className="text-sm text-text-secondary mb-5">
+                <p className="text-[13px] text-text-secondary font-light leading-relaxed mb-6">
                   Check if a product, brand, or claim is truly green or just greenwashing. AI-powered verification against global standards.
                 </p>
-                <Link href="/tools/greenwash-detector" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-danger text-white text-sm font-semibold hover:opacity-90 transition-opacity">
-                  Check Now <ArrowRight className="h-4 w-4" />
-                </Link>
               </div>
+              <Link href="/tools/greenwash-detector" className="inline-flex items-center gap-2 px-4 py-2 rounded border border-white/[0.04] bg-white/[0.02] text-text-secondary text-[11.5px] font-normal tracking-wide hover:text-text-primary hover:bg-white/[0.04] transition-colors w-fit">
+                Check Now <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ─── Trust Badges ─── */}
-      <section id="about" className="py-16 border-t border-border-subtle overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 mb-8 text-center">
-          <p className="text-sm font-bold text-text-muted uppercase tracking-wider">Trusted Architecture</p>
+      <div className="glow-line-h w-full opacity-60" />
+
+      {/* ═══ CAPABILITY MARQUEE ═══ */}
+      <section className="py-16 overflow-hidden bg-[#09090b]">
+        <div className="max-w-7xl mx-auto px-6 mb-6 text-center">
+          <p className="text-[9px] font-normal text-text-muted uppercase tracking-[0.25em] font-light">Infrastructure Capabilities</p>
         </div>
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-          <Marquee pauseOnHover className="[--duration:20s]">
-            {trustBadges.map((badge) => (
-              <div key={badge.label} className="mx-6 flex flex-col items-center justify-center gap-2 text-center w-32 group">
-                <div className="h-14 w-14 rounded-full bg-surface border border-border-subtle flex items-center justify-center group-hover:border-accent/50 group-hover:bg-accent/5 transition-all">
-                  <badge.icon className="h-6 w-6 text-accent group-hover:scale-110 transition-transform" />
-                </div>
-                <p className="text-sm font-semibold text-text-primary whitespace-nowrap">{badge.label}</p>
-                <p className="text-[11px] text-text-muted whitespace-nowrap">{badge.desc}</p>
-              </div>
-            ))}
-            {/* Repeat for seamless loop */}
-            {trustBadges.map((badge) => (
-              <div key={`${badge.label}-dup`} className="mx-6 flex flex-col items-center justify-center gap-2 text-center w-32 group">
-                <div className="h-14 w-14 rounded-full bg-surface border border-border-subtle flex items-center justify-center group-hover:border-accent/50 group-hover:bg-accent/5 transition-all">
-                  <badge.icon className="h-6 w-6 text-accent group-hover:scale-110 transition-transform" />
-                </div>
-                <p className="text-sm font-semibold text-text-primary whitespace-nowrap">{badge.label}</p>
-                <p className="text-[11px] text-text-muted whitespace-nowrap">{badge.desc}</p>
+          <Marquee pauseOnHover className="[--duration:25s]">
+            {capabilities.map((cap) => (
+              <div key={cap} className="mx-4 flex items-center gap-2 px-3.5 py-1.5 card-operational !rounded">
+                <Zap className="h-3 w-3 text-accent/50" />
+                <span className="text-[11.5px] font-normal text-text-secondary tracking-wide">{cap}</span>
               </div>
             ))}
           </Marquee>
-          
-          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-background dark:from-background"></div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-background dark:from-background"></div>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-background" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-background" />
         </div>
       </section>
 
-      {/* ─── Footer ─── */}
-      <footer className="py-8 border-t border-border-subtle">
-        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      {/* ═══ FOOTER ═══ */}
+      <footer className="py-10 border-t border-white/[0.03] bg-[#09090b]">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Leaf className="h-4 w-4 text-accent" />
-            <span className="text-sm text-text-muted">Green Credit AI</span>
+            <div className="h-6 w-6 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
+              <Leaf className="h-3 w-3 text-accent opacity-80" />
+            </div>
+            <span className="text-[12px] text-text-muted font-normal tracking-tight">Green Credit AI</span>
           </div>
-          <p className="text-xs text-text-muted">CBSE Skill Expo 2026-27 • AI-Powered Sustainability</p>
+          <p className="text-[10px] text-text-muted font-light tracking-wide uppercase">
+            CBSE Skill Expo 2026-27 · ACTRM Sustainability Operating System · AI-Powered
+          </p>
         </div>
       </footer>
     </div>

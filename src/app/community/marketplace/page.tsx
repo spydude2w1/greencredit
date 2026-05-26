@@ -29,28 +29,43 @@ export default function MarketplacePage() {
   });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-text-primary flex items-center gap-2">
-          Green Marketplace
-          <ShoppingBag className="h-5 w-5 text-accent" />
+    <div className="space-y-8 font-sans text-text-primary antialiased">
+      {/* Header */}
+      <div className="pb-2 border-b border-white/[0.02]">
+        <h1 className="text-xl font-light text-text-primary flex items-center gap-2 tracking-tight">
+          Eco Marketplace
+          <ShoppingBag className="h-4.5 w-4.5 text-accent" />
         </h1>
-        <p className="text-sm text-text-muted mt-1">Verified eco-friendly products with full carbon transparency</p>
+        <p className="text-[12px] text-text-muted font-light mt-1.5 leading-relaxed">
+          Verified carbon-neutral products with direct environmental verification.
+        </p>
       </div>
 
-      {/* Filters */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
-          <input type="text" placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-10 rounded-lg bg-surface border border-border-subtle pl-10 pr-4 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/50 transition-all" />
+      {/* Filters & Action Bar */}
+      <div className="flex items-center gap-4 flex-wrap">
+        <div className="relative flex-1 max-w-xs">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-muted opacity-80" />
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full h-8.5 rounded bg-[#09090b] border border-white/[0.06] pl-9 pr-4 text-[12px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/30 transition-colors font-light"
+          />
         </div>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <Filter className="h-4 w-4 text-text-muted" />
+        <div className="flex items-center gap-2 flex-wrap">
+          <Filter className="h-3.5 w-3.5 text-text-muted mr-1 opacity-70" />
           {categories.map((cat) => (
-            <button key={cat} onClick={() => setCategory(cat)}
-              className={cn("text-xs px-3 py-1.5 rounded-lg font-medium transition-all",
-                category === cat ? "bg-accent/10 text-accent border border-accent/20" : "bg-surface border border-border-subtle text-text-muted hover:text-text-primary")}>
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className={cn(
+                "text-[10px] px-3 py-1 rounded transition-colors uppercase tracking-wider",
+                category === cat
+                  ? "bg-accent/10 text-accent border border-accent/20"
+                  : "bg-white/[0.02] border border-white/[0.04] text-text-muted hover:text-text-primary"
+              )}
+            >
               {cat}
             </button>
           ))}
@@ -60,28 +75,33 @@ export default function MarketplacePage() {
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filtered.map((product, i) => (
-          <motion.div key={product.id} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="rounded-xl border border-border-subtle bg-surface overflow-hidden card-hover">
-            <div className="h-40 bg-gradient-to-br from-surface-raised to-background flex items-center justify-center relative">
-              <Leaf className="h-16 w-16 text-accent/20" />
-              <span className="absolute top-3 left-3 text-[10px] font-bold px-2 py-0.5 rounded bg-accent/10 text-accent border border-accent/20 flex items-center gap-1">
-                <ShieldCheck className="h-3 w-3" /> Verified
+          <motion.div
+            key={product.id}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.03, duration: 0.3 }}
+            className="rounded border border-white/[0.03] bg-[#0c0c0e]/80 overflow-hidden hover:border-white/[0.08] transition-colors"
+          >
+            <div className="h-36 bg-[#09090b] flex items-center justify-center relative border-b border-white/[0.02]">
+              <Leaf className="h-12 w-12 text-accent/10" />
+              <span className="absolute top-3 left-3 text-[8.5px] font-normal px-2 py-0.5 rounded border border-accent/15 bg-accent/5 text-accent uppercase tracking-wider flex items-center gap-1">
+                <ShieldCheck className="h-3 w-3 shrink-0" /> Verified
               </span>
             </div>
             <div className="p-4">
-              <p className="text-xs text-text-muted">{product.brand}</p>
-              <p className="text-sm font-semibold text-text-primary mt-0.5">{product.name}</p>
+              <p className="text-[10px] text-text-muted uppercase tracking-widest font-light">{product.brand}</p>
+              <p className="text-[13px] font-normal text-text-primary tracking-tight mt-1 leading-snug">{product.name}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className="text-[10px] px-2 py-0.5 rounded bg-accent/10 text-accent">{product.badge}</span>
-                <span className="text-[10px] text-text-muted flex items-center gap-0.5">
-                  <Star className="h-3 w-3 text-warning fill-warning" /> {product.rating}
+                <span className="text-[9px] font-normal px-2 py-0.5 rounded border border-accent/10 bg-accent/5 text-accent uppercase tracking-wider">{product.badge}</span>
+                <span className="text-[9px] text-text-muted flex items-center gap-0.5 ml-auto uppercase font-light tracking-wide">
+                  <Star className="h-3 w-3 text-warning fill-warning opacity-80" /> {product.rating}
                 </span>
               </div>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t border-border-subtle">
-                <span className="text-lg font-bold text-text-primary">₹{product.price}</span>
+              <div className="flex items-center justify-between mt-4 pt-3.5 border-t border-white/[0.02]">
+                <span className="text-[15px] font-light text-text-primary font-mono tracking-tight">₹{product.price}</span>
                 <div className="text-right">
-                  <p className="text-xs font-bold text-accent stat-number">{product.score}/100</p>
-                  <p className="text-[10px] text-text-muted">{product.co2} kg CO₂</p>
+                  <p className="text-[12px] font-light font-mono text-accent">{product.score}/100</p>
+                  <p className="text-[9px] text-text-muted font-light mt-0.5">{product.co2} kg CO₂e</p>
                 </div>
               </div>
             </div>
