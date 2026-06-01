@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Leaf } from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export default function Loading() {
   return (
@@ -20,12 +20,12 @@ export default function Loading() {
         />
         
         {/* Core Icon */}
-        <div className="h-16 w-16 rounded-2xl gradient-green flex items-center justify-center relative z-10 shadow-[0_0_30px_rgba(34,197,94,0.3)]">
+        <div className="relative z-10">
           <motion.div
-            animate={{ rotate: [0, 10, -10, 0] }}
+            animate={{ scale: [0.95, 1.05, 0.95] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Leaf className="h-8 w-8 text-white" />
+            <BrandLogo size={48} className="opacity-90" />
           </motion.div>
         </div>
       </div>

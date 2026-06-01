@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Leaf, Building2, Users, ArrowRight, Sparkles, Shield, BarChart3 } from "lucide-react";
+import { Building2, Users, ArrowRight, Sparkles, Shield, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 type Role = "community" | "enterprise" | null;
 
@@ -31,9 +32,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-between p-14 w-full">
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
-              <Leaf className="h-4 w-4 text-accent opacity-90" />
-            </div>
+            <BrandLogo size={24} className="opacity-90" />
             <span className="text-[13.5px] font-medium text-text-primary tracking-tight">Green Credit AI</span>
           </div>
 
@@ -55,7 +54,7 @@ export default function LoginPage() {
           </div>
 
           <p className="text-[10px] text-text-muted uppercase tracking-widest font-light">
-            CBSE Skill Expo 2026-27 · ACTRM Operating System
+            ACTRM Sustainability Operating System
           </p>
         </div>
       </div>
@@ -70,9 +69,7 @@ export default function LoginPage() {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-2.5 mb-5">
-            <div className="h-8 w-8 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
-              <Leaf className="h-4 w-4 text-accent" />
-            </div>
+            <BrandLogo size={24} className="opacity-90" />
             <span className="text-[13.5px] font-medium text-text-primary tracking-tight">Green Credit AI</span>
           </div>
 

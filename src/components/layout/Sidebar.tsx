@@ -6,13 +6,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   ChevronLeft,
   ChevronRight,
-  Leaf,
   Sparkles,
   Building2,
   Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ECOBOT_NAV, type NavSection } from "@/lib/navigation";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -55,9 +55,7 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle, sections,
     >
       {/* Logo */}
       <div className="flex h-[72px] items-center gap-3 px-4 border-b border-white/[0.03]">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-accent/5 border border-accent/15">
-          <Leaf className="h-4 w-4 text-accent opacity-90" />
-        </div>
+        <BrandLogo size={24} className="opacity-90" />
         <AnimatePresence>
           {!collapsed && (
             <motion.div

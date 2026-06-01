@@ -6,6 +6,14 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { createPortal } from 'react-dom';
 import {
+  motion,
+  useScroll as useFramerScroll,
+  useTransform,
+  useSpring,
+  useMotionValueEvent,
+  type MotionValue,
+} from 'framer-motion';
+import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
@@ -13,7 +21,8 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
-import { LucideIcon, Leaf } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import {
   BarChart3,
   ShieldAlert,
@@ -44,7 +53,7 @@ type LinkItem = {
 const platformLinks: LinkItem[] = [
   {
     title: 'ESG Report Agent',
-    href: '/enterprise',
+    href: '/enterprise/reports',
     icon: FileText,
     description: 'Autonomous BRSR & GRI compliance reporting',
   },
@@ -110,30 +119,143 @@ const resourceLinks: LinkItem[] = [
   { title: 'Platform Status', href: '#', icon: Star },
 ];
 
-/* ─── Scroll Hook ─── */
+/* ─── Spring Configs ─── */
 
-function useScroll(threshold: number) {
-  const [scrolled, setScrolled] = React.useState(false);
+const SPRING_SMOOTH = { stiffness: 280, damping: 32, mass: 0.8 };
+const SPRING_SNAPPY = { stiffness: 400, damping: 38, mass: 0.6 };
 
-  const onScroll = React.useCallback(() => {
-    setScrolled(window.scrollY > threshold);
-  }, [threshold]);
+/* ─── Floating Nav Scroll System ─── */
+
+function useFloatingNav() {
+  const { scrollY } = useFramerScroll();
+
+  // Smooth the raw scroll value for fluid interpolation
+  const smoothScroll = useSpring(scrollY, SPRING_SMOOTH);
+
+  // Progress: 0 (hero) → 1 (compact), mapped across 0–200px scroll
+  const progress = useTransform(smoothScroll, [0, 200], [0, 1]);
+
+  // ── Dimensional transforms ──
+  // Width: 82vw → 520px (compact pill)
+  // These are expressed as percentages for responsive behavior
+  const widthPercent = useTransform(progress, [0, 1], [82, 36]);
+  const width = useTransform(widthPercent, (v) => `${Math.max(v, 36)}%`);
+  const minWidth = useTransform(progress, [0, 1], ['520px', '520px']);
+
+  const height = useTransform(progress, [0, 1], [76, 48]);
+  const heightPx = useTransform(height, (v) => `${v}px`);
+
+  const topOffset = useTransform(progress, [0, 1], [16, 12]);
+  const top = useTransform(topOffset, (v) => `${v}px`);
+
+  // ── Border radius — moderate, not excessively rounded ──
+  const borderRadius = useTransform(progress, [0, 1], [14, 24]);
+  const borderRadiusPx = useTransform(borderRadius, (v) => `${v}px`);
+
+  // ── Glassmorphism ──
+  const bgOpacity = useTransform(progress, [0, 1], [0.55, 0.82]);
+  const backgroundColor = useTransform(
+    bgOpacity,
+    (v) => `rgba(9, 9, 11, ${v})`
+  );
+
+  const blurAmount = useTransform(progress, [0, 1], [10, 20]);
+  const backdropFilter = useTransform(blurAmount, (v) => `blur(${v}px)`);
+
+  const borderOpacity = useTransform(progress, [0, 1], [0.06, 0.10]);
+  const borderColor = useTransform(
+    borderOpacity,
+    (v) => `rgba(255, 255, 255, ${v})`
+  );
+
+  // Shadow deepens in compact mode
+  const shadowSpread = useTransform(progress, [0, 1], [24, 32]);
+  const shadowOpacity = useTransform(progress, [0, 1], [0.25, 0.45]);
+  const boxShadow = useTransform(
+    [shadowSpread, shadowOpacity] as MotionValue[],
+    ([spread, opacity]: number[]) =>
+      `0 8px ${spread}px rgba(0, 0, 0, ${opacity}), inset 0 1px 0 rgba(255, 255, 255, 0.03)`
+  );
+
+  // ── Inner layout ──
+  const paddingX = useTransform(progress, [0, 1], [28, 18]);
+  const paddingXPx = useTransform(paddingX, (v) => `${v}px`);
+
+  // ── Logo ──
+  const logoScale = useTransform(progress, [0, 1], [1, 0.92]);
+
+  // ── Apply springs to everything for weighted motion ──
+  return {
+    width: useSpring(width, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    minWidth,
+    heightPx: useSpring(heightPx, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    top: useSpring(top, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    borderRadiusPx: useSpring(borderRadiusPx, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    backgroundColor: useSpring(backgroundColor, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    backdropFilter: useSpring(backdropFilter, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    borderColor: useSpring(borderColor, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    boxShadow: useSpring(boxShadow, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    paddingXPx: useSpring(paddingXPx, SPRING_SMOOTH) as unknown as MotionValue<string>,
+    logoScale: useSpring(logoScale, SPRING_SMOOTH),
+    progress,
+    scrollY,
+  };
+}
+
+/* ─── Auto-Hide / Reveal Hook ─── */
+
+function useAutoHide(scrollY: MotionValue<number>) {
+  const [hidden, setHidden] = React.useState(false);
+  const lastScrollY = React.useRef(0);
+  const lastDirection = React.useRef<'up' | 'down'>('up');
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const delta = latest - lastScrollY.current;
+
+    // Always show at top of page
+    if (latest < 60) {
+      setHidden(false);
+      lastScrollY.current = latest;
+      lastDirection.current = 'up';
+      return;
+    }
+
+    // Threshold to prevent jitter from micro-scrolls
+    if (Math.abs(delta) < 8) return;
+
+    const direction = delta > 0 ? 'down' : 'up';
+
+    if (direction !== lastDirection.current) {
+      lastDirection.current = direction;
+    }
+
+    setHidden(direction === 'down');
+    lastScrollY.current = latest;
+  });
+
+  // Spring-animated Y position for hide/reveal
+  const translateY = useSpring(hidden ? -120 : 0, SPRING_SNAPPY);
 
   React.useEffect(() => {
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [onScroll]);
+    translateY.set(hidden ? -120 : 0);
+  }, [hidden, translateY]);
 
-  React.useEffect(() => { onScroll(); }, [onScroll]);
-
-  return scrolled;
+  return translateY;
 }
 
 /* ─── Main Header ─── */
 
 export function Header() {
   const [open, setOpen] = React.useState(false);
-  const scrolled = useScroll(12);
+  const [isCompact, setIsCompact] = React.useState(false);
+
+  const nav = useFloatingNav();
+  const translateY = useAutoHide(nav.scrollY);
+
+  // Track compact state for conditional rendering
+  useMotionValueEvent(nav.progress, 'change', (latest) => {
+    setIsCompact(latest > 0.6);
+  });
 
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -141,22 +263,52 @@ export function Header() {
   }, [open]);
 
   return (
-    <header
-      className={cn(
-        'fixed top-0 left-0 right-0 z-[1000] w-full transition-all duration-300',
-        scrolled
-          ? 'glass-tactical border-b border-white/[0.04]'
-          : 'bg-transparent',
-      )}
+    <motion.header
+      style={{
+        position: 'fixed',
+        top: nav.top,
+        left: '50%',
+        x: '-50%',
+        y: translateY,
+        width: nav.width,
+        minWidth: nav.minWidth,
+        height: nav.heightPx,
+        borderRadius: nav.borderRadiusPx,
+        backgroundColor: nav.backgroundColor,
+        backdropFilter: nav.backdropFilter,
+        WebkitBackdropFilter: nav.backdropFilter,
+        borderColor: nav.borderColor,
+        boxShadow: nav.boxShadow,
+      }}
+      className="z-[1000] border overflow-visible"
     >
-      <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
+      {/* Subtle top highlight line */}
+      <div
+        className="absolute inset-x-0 top-0 h-px pointer-events-none"
+        style={{
+          background: 'linear-gradient(90deg, transparent 10%, rgba(255,255,255,0.06) 50%, transparent 90%)',
+          borderRadius: 'inherit',
+        }}
+      />
 
+      <motion.nav
+        style={{
+          paddingLeft: nav.paddingXPx,
+          paddingRight: nav.paddingXPx,
+        }}
+        className="flex h-full w-full items-center justify-between"
+      >
         {/* ── Logo ── */}
-        <Link href="/" className="flex items-center gap-2 shrink-0 group">
-          <div className="h-8 w-8 rounded bg-accent/5 border border-accent/15 flex items-center justify-center transition-colors group-hover:border-accent/30 group-hover:bg-accent/10">
-            <Leaf className="h-4 w-4 text-accent opacity-90" />
-          </div>
-          <span className="text-[13.5px] font-normal text-text-primary tracking-tight hidden sm:block">
+        <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
+          <motion.div style={{ scale: nav.logoScale }}>
+            <BrandLogo size={28} className="opacity-90 group-hover:opacity-100 transition-opacity" />
+          </motion.div>
+          <span
+            className={cn(
+              'text-[13.5px] font-normal text-text-primary tracking-tight transition-opacity duration-300',
+              isCompact ? 'hidden lg:block' : 'hidden sm:block'
+            )}
+          >
             Green Credit <span className="text-accent">AI</span>
           </span>
         </Link>
@@ -241,12 +393,28 @@ export function Header() {
 
         {/* ── Desktop CTAs ── */}
         <div className="hidden items-center gap-2 md:flex">
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/login">Sign In</Link>
-          </Button>
-          <Button size="sm" asChild>
-            <Link href="/login">Launch Platform</Link>
-          </Button>
+          {!isCompact ? (
+            <>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/login">Sign In</Link>
+              </Button>
+              <Button size="sm" asChild>
+                <Link href="/login">Launch Platform</Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-[11.5px] font-normal text-text-muted hover:text-text-primary transition-colors px-2"
+              >
+                Sign In
+              </Link>
+              <Button size="sm" className="h-7 px-3 text-[11px]" asChild>
+                <Link href="/login">Launch</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* ── Mobile Toggle ── */}
@@ -261,7 +429,7 @@ export function Header() {
         >
           <MenuToggleIcon open={open} className="size-4.5" duration={280} />
         </Button>
-      </nav>
+      </motion.nav>
 
       {/* ── Mobile Menu ── */}
       <MobileMenu open={open} className="flex flex-col justify-between gap-4 overflow-y-auto">
@@ -292,7 +460,7 @@ export function Header() {
           </Button>
         </div>
       </MobileMenu>
-    </header>
+    </motion.header>
   );
 }
 
@@ -306,7 +474,7 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
   return createPortal(
     <div
       id="mobile-menu"
-      className="glass-tactical fixed top-14 right-0 bottom-0 left-0 z-[999] flex flex-col overflow-hidden border-t border-white/[0.04] md:hidden"
+      className="glass-tactical fixed top-0 right-0 bottom-0 left-0 z-[999] flex flex-col overflow-hidden md:hidden pt-24"
     >
       <div
         data-slot={open ? 'open' : 'closed'}

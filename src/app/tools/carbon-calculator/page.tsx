@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Calculator, Lock, Car, Utensils, Zap, ShoppingBag, Plane, Leaf, ArrowRight } from "lucide-react";
+import { Calculator, Lock, Car, Utensils, Zap, ShoppingBag, Plane, ArrowRight } from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const categories = [
   { id: "transport", label: "Transport", icon: Car },
@@ -19,9 +20,7 @@ export default function PublicCarbonCalculator() {
       <nav className="sticky top-0 z-50 border-b border-border-subtle bg-background/80 backdrop-blur-xl">
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-lg gradient-green flex items-center justify-center">
-              <Leaf className="h-4 w-4 text-white" />
-            </div>
+            <BrandLogo size={20} className="opacity-90" />
             <span className="text-sm font-bold text-text-primary">Green Credit AI</span>
           </Link>
           <Link href="/login" className="px-4 py-1.5 rounded-lg gradient-green text-white text-xs font-semibold hover:opacity-90">

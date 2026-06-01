@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ShoppingBag, Search, Filter, Leaf, Star, ShieldCheck } from "lucide-react";
+import { ShoppingBag, Search, Filter, Star, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const categories = ["All", "Office", "Energy", "Food", "Personal Care", "Cleaning", "Packaging"];
 
@@ -83,7 +84,7 @@ export default function MarketplacePage() {
             className="rounded border border-white/[0.03] bg-[#0c0c0e]/80 overflow-hidden hover:border-white/[0.08] transition-colors"
           >
             <div className="h-36 bg-[#09090b] flex items-center justify-center relative border-b border-white/[0.02]">
-              <Leaf className="h-12 w-12 text-accent/10" />
+              <BrandLogo size={48} className="opacity-20 grayscale" />
               <span className="absolute top-3 left-3 text-[8.5px] font-normal px-2 py-0.5 rounded border border-accent/15 bg-accent/5 text-accent uppercase tracking-wider flex items-center gap-1">
                 <ShieldCheck className="h-3 w-3 shrink-0" /> Verified
               </span>

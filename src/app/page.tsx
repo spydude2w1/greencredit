@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useEffect, useRef } from "react";
 import {
-  Leaf, ArrowRight, Building2, Users, BarChart3, ShieldAlert,
-  FileText, Truck, Trophy, ShoppingBag, Bot, Sparkles,
+  ArrowRight, Building2, Users, BarChart3, ShieldAlert,
+  FileText, Truck, Trophy, ShoppingBag, Bot,
   Calculator, Search, Database, Cpu, TrendingDown, Coins, Zap
 } from "lucide-react";
 import { Header } from "@/components/ui/header-3";
 import ACTRMEngine from "@/components/landing/ACTRMEngine";
+import Footer from "@/components/landing/Footer";
 import { Marquee } from "@/components/magicui/marquee";
 import Beams from "@/components/reactbits/Beams";
 import BorderGlow from "@/components/ui/BorderGlow";
+import SmoothScroll from "@/components/layout/SmoothScroll";
 
 /* ─── Data ─── */
 
@@ -49,47 +52,84 @@ const capabilities = [
 ];
 
 /* ─── Animations ─── */
+//
+// ROOT CAUSE FIX — Content disappearing after tab switch:
+// `whileInView` + `viewport: { once: true }` registers an IntersectionObserver that fires
+// exactly once, animates elements to opacity:1, then *permanently removes itself*.
+// When the user switches tabs, the browser compositor may reset painted styles.
+// On tab return, there is no live observer to re-fire the animation, so elements remain
+// permanently stuck at their initial state (opacity:0, y:16) — appearing blank.
+//
+// Fix: Use unconditional `animate` props instead. Since this is a "use client" component
+// that has fully hydrated, `animate` fires immediately on mount and stays permanently
+// applied — survives any tab-switch, window blur, or visibility-state change.
 
 const fadeUp: any = {
   initial: { opacity: 0, y: 16 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
+  animate: { opacity: 1, y: 0 },
   transition: { duration: 0.5, ease: "easeOut" },
 };
 
 const stagger: any = {
   initial: { opacity: 0, y: 12 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
+  animate: { opacity: 1, y: 0 },
 };
+
+/* ─── Visibility Recovery Hook ─── */
+// Secondary safety net for edge cases in Safari / older Chromium where the compositor
+// resets element styles on tab restore even with unconditional `animate` props.
+function useVisibilityRecovery(containerRef: React.RefObject<HTMLDivElement | null>) {
+  useEffect(() => {
+    const recover = () => {
+      if (document.visibilityState === "visible" && containerRef.current) {
+        // Toggle willChange to force a compositor layer repaint without layout shift.
+        const el = containerRef.current;
+        el.style.willChange = "opacity";
+        requestAnimationFrame(() => {
+          if (el) el.style.willChange = "auto";
+        });
+      }
+    };
+    document.addEventListener("visibilitychange", recover);
+    window.addEventListener("focus", recover);
+    return () => {
+      document.removeEventListener("visibilitychange", recover);
+      window.removeEventListener("focus", recover);
+    };
+  }, [containerRef]);
+}
 
 /* ─── Page ─── */
 
 export default function LandingPage() {
+  const pageRef = useRef<HTMLDivElement>(null);
+  useVisibilityRecovery(pageRef);
+
   return (
-    <div className="min-h-screen bg-background relative font-sans text-text-primary antialiased">
-      <Header />
+    <SmoothScroll>
+      <div ref={pageRef} className="min-h-screen bg-background relative font-sans text-text-primary antialiased">
+        <Header />
 
       {/* ═══ HERO ═══ */}
       <section className="relative min-h-screen flex items-center overflow-hidden">
         {/* Background layers */}
-        <div className="absolute inset-0 z-0 pointer-events-none opacity-45">
+        <div className="absolute inset-0 z-0 pointer-events-none opacity-60">
           <Beams
             beamWidth={2.5}
             beamHeight={16}
             beamNumber={14}
-            lightColor="#22c55e"
+            lightColor="#4ade80"
             speed={1.0}
             noiseIntensity={1.4}
             scale={0.2}
             rotation={12}
           />
         </div>
-        <div className="absolute inset-0 grid-topology opacity-25 z-1" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-radial-[at_70%_30%] from-accent/[0.02] to-transparent z-1" />
+        <div className="absolute inset-0 grid-topology opacity-40 z-1" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-radial-[at_70%_30%] from-accent/[0.05] to-transparent z-1" />
         <div className="absolute inset-0 scan-overlay pointer-events-none z-1" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-32 pb-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full pt-36 pb-24">
           <div className="flex flex-col lg:flex-row items-center gap-20 lg:gap-24">
             
             {/* Left — Messaging */}
@@ -426,19 +466,8 @@ export default function LandingPage() {
       </section>
 
       {/* ═══ FOOTER ═══ */}
-      <footer className="py-10 border-t border-white/[0.03] bg-[#09090b]">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
-              <Leaf className="h-3 w-3 text-accent opacity-80" />
-            </div>
-            <span className="text-[12px] text-text-muted font-normal tracking-tight">Green Credit AI</span>
-          </div>
-          <p className="text-[10px] text-text-muted font-light tracking-wide uppercase">
-            CBSE Skill Expo 2026-27 · ACTRM Sustainability Operating System · AI-Powered
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
+    </SmoothScroll>
   );
 }

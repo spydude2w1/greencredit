@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Leaf, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 const navItems = [
   { label: "Platforms", href: "#platforms" },
@@ -23,10 +24,8 @@ export default function GlassNav() {
     >
       <div className="glass-tactical rounded-[10px] px-4 py-2 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 shrink-0">
-          <div className="h-7 w-7 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
-            <Leaf className="h-3.5 w-3.5 text-accent opacity-90" />
-          </div>
+        <Link href="/" className="flex items-center gap-2.5 shrink-0">
+          <BrandLogo size={24} className="opacity-90" />
           <span className="text-[12px] font-medium text-text-primary hidden sm:block tracking-tight">
             Green Credit AI
           </span>
