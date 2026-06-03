@@ -8,7 +8,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 const platformLinks = [
   { label: "Enterprise Dashboard", href: "/enterprise" },
   { label: "Community Dashboard", href: "/community" },
-  { label: "EcoBot AI", href: "/community/ecobot" },
+  { label: "EcoBot Dashboard", href: "/enterprise/ecobot" },
   { label: "Carbon Analysis", href: "/tools/carbon-calculator" },
   { label: "ESG Automation", href: "/enterprise/compliance" },
   { label: "Green Marketplace", href: "/community/marketplace" },

@@ -147,7 +147,7 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle, sections,
             "hover:bg-accent/10 hover:border-accent/30 transition-colors duration-150"
           )}
         >
-          <Sparkles className="h-[16.5px] w-[16.5px] shrink-0 opacity-80" />
+          <ECOBOT_NAV.icon className="h-[16.5px] w-[16.5px] shrink-0 opacity-80" />
           <AnimatePresence>
             {!collapsed && (
               <motion.span
@@ -163,7 +163,7 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle, sections,
           </AnimatePresence>
           {!collapsed && (
             <span className="ml-auto text-[10px] font-light px-1.5 py-0.5 rounded border border-accent/20 bg-accent/10 text-accent uppercase tracking-wider">
-              AI
+              Agent
             </span>
           )}
         </button>

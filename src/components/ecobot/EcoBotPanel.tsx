@@ -42,7 +42,7 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
     {
       id: "welcome",
       role: "assistant",
-      content: "Hello! I'm **EcoBot**, your AI sustainability assistant. I can help with carbon calculations, ESG guidance, sustainability tips, and more. How can I help you today?",
+      content: "Hello! I am the **EcoBot Agent OS** console. I can coordinate sustainability tasks, execute custom ESG reports, analyze Scope 3 emissions, or run greenwash scans. Ask me anything or open the **EcoBot Dashboard** for complete mission control.",
       timestamp: new Date(),
     },
   ]);
@@ -95,7 +95,7 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
           className="fixed right-0 top-0 z-50 h-screen w-[440px] max-w-full flex flex-col border-l border-white/[0.03] bg-[#0c0c0e]"
         >
           {/* Header */}
-          <div className="flex items-center justify-between h-18 px-6 border-b border-white/[0.02]">
+          <div className="flex items-center justify-between h-18 px-6 border-b border-b-white/[0.02]">
             <div className="flex items-center gap-3.5">
               <div className="relative">
                 <div className="h-9.5 w-9.5 rounded bg-accent/5 border border-accent/15 flex items-center justify-center">
@@ -105,10 +105,10 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
               </div>
               <div>
                 <h2 className="text-[13.5px] font-normal text-text-primary flex items-center gap-1.5 tracking-tight leading-none">
-                  EcoBot Assistant
-                  <Zap className="h-3.5 w-3.5 text-accent" />
+                  EcoBot Agent OS Link
+                  <Zap className="h-3.5 w-3.5 text-accent animate-pulse" />
                 </h2>
-                <p className="text-[11px] text-text-muted font-light mt-1.5">Sustainability Intelligence Engine</p>
+                <p className="text-[11px] text-text-muted font-light mt-1.5">Direct Agent Communication Console</p>
               </div>
             </div>
             <button

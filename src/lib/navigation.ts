@@ -35,7 +35,7 @@ export const ENTERPRISE_NAV: NavSection[] = [
   {
     title: "Intelligence",
     items: [
-      { label: "EcoBot Agent OS", href: "/enterprise/ecobot", icon: Bot, badge: "Agent" },
+      { label: "EcoBot Dashboard", href: "/enterprise/ecobot", icon: Bot, badge: "Agent" },
       { label: "ESG Reports", href: "/enterprise/reports", icon: FileText, badge: "Agent" },
       { label: "Carbon Analysis", href: "/enterprise/carbon", icon: BarChart3 },
       { label: "Suppliers", href: "/enterprise/suppliers", icon: Truck },
@@ -95,7 +95,7 @@ export const COMMUNITY_NAV: NavSection[] = [
 
 // ─── EcoBot (shared) ────────────────────────────────────────────────
 export const ECOBOT_NAV: NavItem = {
-  label: "EcoBot Agent OS",
+  label: "Chat with Agent",
   href: "/enterprise/ecobot",
   icon: Bot,
   badge: "Agent",
