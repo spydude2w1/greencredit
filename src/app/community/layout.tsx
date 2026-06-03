@@ -14,7 +14,7 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
   const [ecobotOpen, setEcobotOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background font-sans antialiased text-text-primary">
       <Sidebar
         collapsed={sidebarCollapsed}
         mobileOpen={mobileOpen}
