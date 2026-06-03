@@ -136,13 +136,12 @@ function useFloatingNav() {
   const progress = useTransform(smoothScroll, [0, 200], [0, 1]);
 
   // ── Dimensional transforms ──
-  // Width: 82vw → 520px (compact pill)
-  // These are expressed as percentages for responsive behavior
-  const widthPercent = useTransform(progress, [0, 1], [82, 36]);
-  const width = useTransform(widthPercent, (v) => `${Math.max(v, 36)}%`);
-  const minWidth = useTransform(progress, [0, 1], ['520px', '520px']);
+  // Width: responsive clamp that works on all screen sizes
+  // On desktop: 82vw → 36vw. On mobile, clamp prevents overflow.
+  const widthPercent = useTransform(progress, [0, 1], [88, 90]);
+  const width = useTransform(widthPercent, (v) => `min(${v}vw, 920px)`);
 
-  const height = useTransform(progress, [0, 1], [76, 48]);
+  const height = useTransform(progress, [0, 1], [64, 48]);
   const heightPx = useTransform(height, (v) => `${v}px`);
 
   const topOffset = useTransform(progress, [0, 1], [16, 12]);
@@ -178,7 +177,7 @@ function useFloatingNav() {
   );
 
   // ── Inner layout ──
-  const paddingX = useTransform(progress, [0, 1], [28, 18]);
+  const paddingX = useTransform(progress, [0, 1], [20, 16]);
   const paddingXPx = useTransform(paddingX, (v) => `${v}px`);
 
   // ── Logo ──
@@ -187,7 +186,6 @@ function useFloatingNav() {
   // ── Apply springs to everything for weighted motion ──
   return {
     width: useSpring(width, SPRING_SMOOTH) as unknown as MotionValue<string>,
-    minWidth,
     heightPx: useSpring(heightPx, SPRING_SMOOTH) as unknown as MotionValue<string>,
     top: useSpring(top, SPRING_SMOOTH) as unknown as MotionValue<string>,
     borderRadiusPx: useSpring(borderRadiusPx, SPRING_SMOOTH) as unknown as MotionValue<string>,
@@ -199,6 +197,7 @@ function useFloatingNav() {
     logoScale: useSpring(logoScale, SPRING_SMOOTH),
     progress,
     scrollY,
+    height,
   };
 }
 
@@ -248,6 +247,7 @@ function useAutoHide(scrollY: MotionValue<number>) {
 export function Header() {
   const [open, setOpen] = React.useState(false);
   const [isCompact, setIsCompact] = React.useState(false);
+  const [headerHeight, setHeaderHeight] = React.useState(64);
 
   const nav = useFloatingNav();
   const translateY = useAutoHide(nav.scrollY);
@@ -257,10 +257,24 @@ export function Header() {
     setIsCompact(latest > 0.6);
   });
 
+  // Track header height for mobile menu positioning
+  useMotionValueEvent(nav.height, 'change', (latest) => {
+    setHeaderHeight(latest);
+    // Write to CSS custom property for mobile menu
+    if (typeof document !== 'undefined') {
+      document.documentElement.style.setProperty('--gc-header-h', `${latest}px`);
+    }
+  });
+
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  // Set initial CSS custom property
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--gc-header-h', `${headerHeight}px`);
+  }, [headerHeight]);
 
   return (
     <motion.header
@@ -271,7 +285,6 @@ export function Header() {
         x: '-50%',
         y: translateY,
         width: nav.width,
-        minWidth: nav.minWidth,
         height: nav.heightPx,
         borderRadius: nav.borderRadiusPx,
         backgroundColor: nav.backgroundColor,
@@ -301,12 +314,12 @@ export function Header() {
         {/* ── Logo ── */}
         <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
           <motion.div style={{ scale: nav.logoScale }}>
-            <BrandLogo size={28} className="opacity-90 group-hover:opacity-100 transition-opacity" />
+            <BrandLogo size={26} className="opacity-90 group-hover:opacity-100 transition-opacity" />
           </motion.div>
           <span
             className={cn(
-              'text-[13.5px] font-normal text-text-primary tracking-tight transition-opacity duration-300',
-              isCompact ? 'hidden lg:block' : 'hidden sm:block'
+              'text-[13px] font-normal text-text-primary tracking-tight transition-opacity duration-300',
+              isCompact ? 'block' : 'block'
             )}
           >
             Green Credit <span className="text-accent">AI</span>
@@ -422,7 +435,7 @@ export function Header() {
           size="icon"
           variant="ghost"
           onClick={() => setOpen(!open)}
-          className="md:hidden h-9 w-9"
+          className="md:hidden h-9 w-9 shrink-0"
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label="Toggle menu"
@@ -432,7 +445,7 @@ export function Header() {
       </motion.nav>
 
       {/* ── Mobile Menu ── */}
-      <MobileMenu open={open} className="flex flex-col justify-between gap-4 overflow-y-auto">
+      <MobileMenu open={open} headerHeight={headerHeight} className="flex flex-col justify-between gap-4 overflow-y-auto">
         <div className="flex flex-col gap-3">
           <div>
             <p className="text-[10px] uppercase tracking-[0.2em] text-text-muted mb-2.5 font-light px-1">Platform</p>
@@ -466,21 +479,33 @@ export function Header() {
 
 /* ─── Mobile Menu Portal ─── */
 
-type MobileMenuProps = React.ComponentProps<'div'> & { open: boolean };
+type MobileMenuProps = React.ComponentProps<'div'> & {
+  open: boolean;
+  headerHeight: number;
+};
 
-function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
+function MobileMenu({ open, headerHeight, children, className, ...props }: MobileMenuProps) {
   if (!open || typeof window === 'undefined') return null;
+
+  // Top offset = header height (dynamic) + top margin (16px) + small gap (8px)
+  const topClearance = headerHeight + 16 + 8;
 
   return createPortal(
     <div
       id="mobile-menu"
-      className="glass-tactical fixed top-0 right-0 bottom-0 left-0 z-[999] flex flex-col overflow-hidden md:hidden pt-24"
+      className="fixed inset-x-0 bottom-0 z-[999] flex flex-col overflow-hidden md:hidden"
+      style={{ top: `${topClearance}px` }}
     >
+      {/* Backdrop blur behind menu content */}
+      <div
+        className="absolute inset-0 bg-[#09090b]/90"
+        style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+      />
       <div
         data-slot={open ? 'open' : 'closed'}
         className={cn(
           'data-[slot=open]:animate-in data-[slot=open]:zoom-in-97 ease-out',
-          'size-full p-5',
+          'relative size-full p-5',
           className,
         )}
         {...props}

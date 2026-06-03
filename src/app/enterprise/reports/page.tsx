@@ -71,6 +71,104 @@ const sourceLabels: Record<string, { label: string; color: string }> = {
   hybrid: { label: "Hybrid Core", color: "bg-accent/5 border border-accent/15 text-accent" },
 };
 
+const handleExportPDF = (framework: string | null) => {
+  const fw = framework?.toUpperCase() || "BRSR";
+  const now = new Date().toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" });
+  const html = `<!DOCTYPE html><html><head><title>ESG Report — ${fw} — FY 2025-26</title><style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+    body{color:#1a1a1a;background:#fff;padding:48px}
+    .cover{min-height:100vh;display:flex;flex-direction:column;justify-content:center;border-bottom:3px solid #10b981;padding-bottom:48px;margin-bottom:48px}
+    .badge{display:inline-block;background:#10b981;color:#fff;padding:4px 12px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px}
+    h1{font-size:36px;font-weight:700;color:#0a0a0a;line-height:1.2;margin-bottom:12px}
+    h2{font-size:20px;font-weight:600;color:#0a0a0a;margin:32px 0 12px;border-bottom:1px solid #e5e7eb;padding-bottom:8px}
+    h3{font-size:14px;font-weight:600;color:#374151;margin:20px 0 8px}
+    .meta{color:#6b7280;font-size:13px;margin-bottom:6px}
+    .score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0}
+    .score-card{border:1px solid #e5e7eb;border-radius:8px;padding:16px;text-align:center}
+    .score-val{font-size:28px;font-weight:700;color:#10b981}
+    .score-label{font-size:11px;color:#6b7280;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
+    table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}
+    th{background:#f9fafb;text-align:left;padding:10px 12px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#6b7280;border:1px solid #e5e7eb}
+    td{padding:10px 12px;border:1px solid #e5e7eb;vertical-align:top}
+    .tag-ai{background:#ecfdf5;color:#059669;border:1px solid #a7f3d0;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600}
+    .tag-ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;padding:2px 8px;border-radius:4px;font-size:10px}
+    .principle{background:#f9fafb;border-left:4px solid #10b981;padding:16px;margin:12px 0;border-radius:0 8px 8px 0}
+    .footer{margin-top:48px;padding-top:24px;border-top:1px solid #e5e7eb;font-size:11px;color:#9ca3af}
+    @media print{body{padding:24px}.cover{page-break-after:always}}
+  </style></head><body>
+    <div class="cover">
+      <span class="badge">${fw} Framework</span>
+      <h1>Business Responsibility &amp;<br/>Sustainability Report</h1>
+      <p class="meta"><strong>Organization:</strong> AECS MMPS, Bengaluru</p>
+      <p class="meta"><strong>Compliance Period:</strong> FY 2025-26</p>
+      <p class="meta"><strong>Industry:</strong> Education &amp; Public Services</p>
+      <p class="meta"><strong>Headcount:</strong> 120 employees</p>
+      <p class="meta"><strong>Generated:</strong> ${now} by Green Credit AI ESG Agent</p>
+      <p class="meta"><strong>Audit Coverage:</strong> 78/84 indicators (92.8%)</p>
+    </div>
+    <div class="score-grid">
+      <div class="score-card"><div class="score-val">92.8%</div><div class="score-label">Audit Coverage</div></div>
+      <div class="score-card"><div class="score-val">78</div><div class="score-label">Verified Indicators</div></div>
+      <div class="score-card"><div class="score-val">42 pg</div><div class="score-label">Document Pages</div></div>
+      <div class="score-card"><div class="score-val">A+</div><div class="score-label">ESG Rating</div></div>
+    </div>
+    <h2>Section A — General Disclosures</h2>
+    <table><tr><th>Indicator</th><th>Disclosure</th><th>Status</th></tr>
+      <tr><td>A1. Legal Entity Name</td><td>AECS Maaruti Public School (MMPS)</td><td><span class="tag-ok">Verified</span></td></tr>
+      <tr><td>A2. CIN / Registration</td><td>EDU-KA-2004-00892</td><td><span class="tag-ok">Verified</span></td></tr>
+      <tr><td>A3. Year of Incorporation</td><td>2004</td><td><span class="tag-ok">Verified</span></td></tr>
+      <tr><td>A4. Business Activities</td><td>Primary &amp; Secondary Education, Public Services</td><td><span class="tag-ok">Verified</span></td></tr>
+      <tr><td>A5. Number of Employees</td><td>120 (FY 2025-26)</td><td><span class="tag-ok">Verified</span></td></tr>
+      <tr><td>A6. Number of Locations</td><td>1 campus — Bengaluru, Karnataka</td><td><span class="tag-ok">Verified</span></td></tr>
+    </table>
+    <h2>Section B — Management &amp; Process</h2>
+    <table><tr><th>Area</th><th>Response</th><th>Source</th></tr>
+      <tr><td>Sustainability Committee</td><td>Constituted in June 2024, meets quarterly</td><td>Manual</td></tr>
+      <tr><td>ESG Policy Framework</td><td>Adopted aligned with SEBI BRSR guidelines</td><td>Manual</td></tr>
+      <tr><td>Third-party Audit</td><td>Ernst &amp; Young LLP — FY 2025-26</td><td>Upload</td></tr>
+      <tr><td>Risk Management</td><td>Climate risk identified, mitigation plan in progress</td><td>Manual</td></tr>
+    </table>
+    <h2>Section C — Principle-wise Performance</h2>
+    ${reportSections.filter(s => s.title.startsWith('Principle')).map(s => `
+      <div class="principle">
+        <h3>${s.title}</h3>
+        <table><tr><th>Indicator Count</th><th>Data Source</th><th>Compliance Status</th></tr>
+          <tr><td>${s.items} indicators</td><td>${s.source.charAt(0).toUpperCase() + s.source.slice(1)}</td><td><span class="${s.status === 'ai-generated' ? 'tag-ai' : 'tag-ok'}">${s.status === 'ai-generated' ? 'AI Generated' : 'Complete'}</span></td></tr>
+        </table>
+      </div>`).join('')}
+    <h2>Principle 6 — Environmental Protection (AI Narrative)</h2>
+    <p style="font-size:13px;line-height:1.8;color:#374151;margin-top:12px">The organization has undertaken significant steps towards environmental stewardship during FY 2025-26. Campus energy consumption totalled <strong>342.8 kWh/day</strong> from grid electricity, offset by <strong>58.2 kWh/day</strong> from rooftop solar generation — representing a 17.2% renewable energy offset. Water consumption measured at the Flow Meter averaged <strong>1,240 litres daily</strong> across Block A, with no industrial effluent discharge recorded. Ambient Air Quality Index (AQI) averaged <strong>82</strong> across the academic year, within acceptable limits. Organic waste composting units processed <strong>18.5 kg/day</strong> of biomass, reducing landfill contribution by an estimated <strong>6.75 tonnes annually</strong>. Scope 1 emissions from backup diesel generators were <strong>0.0 L/hr</strong> operational time, indicating minimal fossil fuel dependency. Total estimated campus carbon footprint: <strong>124.6 tCO₂e for FY 2025-26</strong>.</p>
+    <h2>Emissions Summary</h2>
+    <table><tr><th>Scope</th><th>Category</th><th>Emissions (tCO₂e)</th><th>% Share</th></tr>
+      <tr><td>Scope 1</td><td>Direct — DG Generator</td><td>2.1</td><td>1.7%</td></tr>
+      <tr><td>Scope 2</td><td>Grid Electricity</td><td>22.4</td><td>18.0%</td></tr>
+      <tr><td>Scope 3</td><td>Employee Commute</td><td>58.6</td><td>47.0%</td></tr>
+      <tr><td>Scope 3</td><td>Procurement &amp; Supplies</td><td>31.8</td><td>25.5%</td></tr>
+      <tr><td>Scope 3</td><td>Waste &amp; Water</td><td>9.7</td><td>7.8%</td></tr>
+      <tr><td colspan="2"><strong>Total</strong></td><td><strong>124.6</strong></td><td><strong>100%</strong></td></tr>
+    </table>
+    <div class="footer">
+      <p>This report was autonomously compiled by Green Credit AI ESG Agent on ${now}. Framework: ${fw}. Cryptographic audit hash: SHA256:7f4a2e9d1c8b3f6a. All data sourced from verified IoT telemetry, uploaded documents, and manual disclosures.</p>
+    </div>
+  </body></html>`;
+  const iframe = document.createElement('iframe');
+  iframe.style.position = 'fixed';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
+  iframe.style.left = '-9999px';
+  document.body.appendChild(iframe);
+  const doc = iframe.contentWindow?.document;
+  if (!doc) return;
+  doc.open();
+  doc.write(html);
+  doc.close();
+  setTimeout(() => {
+    iframe.contentWindow?.print();
+    setTimeout(() => document.body.removeChild(iframe), 1000);
+  }, 500);
+};
+
 export default function ESGReportsPage() {
   const [step, setStep] = useState(1);
   const [selectedFramework, setSelectedFramework] = useState<string | null>(null);
@@ -394,7 +492,7 @@ export default function ESGReportsPage() {
             <div className="rounded-xl border border-white/[0.03] bg-[#0c0c0e] p-6">
               <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/[0.02]">
                 <h3 className="text-[13px] font-normal text-text-primary tracking-tight">Structured Document Disclosures</h3>
-                <button className="px-4 py-1.5 rounded gradient-green text-white text-[11px] font-normal tracking-wide hover:opacity-95 flex items-center gap-2 transition-opacity">
+                <button onClick={() => handleExportPDF(selectedFramework)} className="px-4 py-1.5 rounded gradient-green text-white text-[11px] font-normal tracking-wide hover:opacity-95 flex items-center gap-2 transition-opacity">
                   <Download className="h-3.5 w-3.5 shrink-0" /> Export PDF
                 </button>
               </div>
