@@ -16,13 +16,14 @@ import {
   MessageSquare,
   Search,
   ShoppingCart,
-  Plane,
-  Home
+  Home,
+  Crown
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ScoreGauge } from "@/components/dashboard/Cards";
-import { userProfile, quickStats, recentActivity } from "@/lib/data/dashboard-data";
+import { userProfile, quickStats, recentActivity, leaderboardPreview } from "@/lib/data/dashboard-data";
 import { PATHFINDER_MISSIONS, COPILOT_SCENARIOS, type PathfinderMission, type CopilotAnalysis } from "@/lib/data/pathfinder-data";
+import GreenwashScanner from "@/components/community/GreenwashScanner";
 
 export default function CommunityDashboard() {
   // Pathfinder State
@@ -394,6 +395,108 @@ export default function CommunityDashboard() {
                 <button type="submit" className="hidden">Submit</button>
               </div>
             </form>
+          </motion.div>
+        </div>
+
+        {/* ═══════ BOTTOM ROW: ACTIONS, LEADERBOARD, GREENWASH ═══════ */}
+        <div className="xl:col-span-4 grid grid-cols-1 xl:grid-cols-4 gap-6 mt-2">
+          {/* Recent Actions */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="xl:col-span-1 rounded-xl border border-white/[0.04] bg-[#0c0c0e] p-6 h-full"
+          >
+            <h3 className="text-[13.5px] font-medium text-text-primary tracking-tight mb-5 pb-1 border-b border-white/[0.02]">
+              Recent Actions
+            </h3>
+            <div className="space-y-1">
+              {recentActivity.map((activity) => (
+                <div
+                  key={activity.id}
+                  className="flex items-center gap-3 py-3 border-b border-white/[0.02] last:border-0 hover:bg-white/[0.01] px-1 rounded transition-colors"
+                >
+                  <span className="text-lg shrink-0">{activity.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[12px] text-text-primary truncate tracking-tight">
+                      {activity.action}
+                    </p>
+                    <p className="text-[9.5px] text-text-muted font-light mt-0.5">{activity.time}</p>
+                  </div>
+                  <span className="text-[11.5px] font-mono text-accent">
+                    +{activity.credits} credits
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Community Leaderboard */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="xl:col-span-1 rounded-xl border border-white/[0.04] bg-[#0c0c0e] p-6 h-full"
+          >
+            <div className="flex items-center justify-between mb-5 pb-1 border-b border-white/[0.02]">
+              <h3 className="text-[13.5px] font-medium text-text-primary tracking-tight flex items-center gap-2">
+                <Crown className="h-4.5 w-4.5 text-warning/80" />
+                Leaderboard
+              </h3>
+              <button className="text-[12px] text-accent/80 hover:text-accent hover:underline flex items-center gap-1 transition-colors">
+                View All <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {leaderboardPreview.map((user) => (
+                <div
+                  key={user.rank}
+                  className={cn(
+                    "flex items-center gap-3 p-2.5 rounded border transition-colors",
+                    user.name.includes("Shivam")
+                      ? "bg-accent/5 border-accent/20"
+                      : "border-transparent hover:bg-white/[0.01]"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "h-6 w-6 rounded flex items-center justify-center text-[10px] font-mono",
+                      user.rank === 1
+                        ? "bg-warning/15 text-warning/90 border border-warning/10"
+                        : user.rank === 2
+                        ? "bg-zinc-500/15 text-zinc-400 border border-white/[0.05]"
+                        : user.rank === 3
+                        ? "bg-amber-700/15 text-amber-500 border border-amber-700/10"
+                        : "bg-[#141417] text-text-muted"
+                    )}
+                  >
+                    {user.rank}
+                  </span>
+                  <div className="h-7 w-7 rounded bg-accent/5 border border-accent/15 flex items-center justify-center text-accent text-[10px] font-normal tracking-wide">
+                    {user.avatar}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[12.5px] font-normal text-text-primary tracking-tight">
+                      {user.name}
+                    </p>
+                    <p className="text-[9.5px] text-text-muted font-light mt-0.5">{user.school}</p>
+                  </div>
+                  <span className="text-[12px] font-mono text-text-primary opacity-90">
+                    {user.score} pts
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Greenwash Scanner */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="xl:col-span-2 h-full"
+          >
+            <GreenwashScanner />
           </motion.div>
         </div>
 
