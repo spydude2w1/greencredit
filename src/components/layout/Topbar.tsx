@@ -81,10 +81,10 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
 
   return (
     <header
-      className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-white/[0.03] bg-[#09090b]/80 backdrop-blur-xl px-6 transition-all duration-300 font-sans text-text-primary antialiased"
+      className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-white/[0.03] bg-[#09090b]/80 backdrop-blur-xl px-6 transition-all duration-300 font-sans text-text-primary antialiased relative"
     >
       {/* Mobile Toggle & Breadcrumbs */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 z-10">
         {onMobileToggle && (
           <button
             onClick={onMobileToggle}
@@ -112,22 +112,24 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
         </nav>
       </div>
 
-      {/* Right Side */}
-      <div className="flex items-center gap-3">
-        {/* Search */}
-        <div className="relative hidden md:block" onClick={() => setIsSearchOpen(true)}>
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-[15px] w-[15px] text-text-muted opacity-70 cursor-pointer" />
+      {/* Center - Search */}
+      <div className="absolute left-1/2 -translate-x-1/2 hidden md:block w-full max-w-md z-10">
+        <div className="relative w-full group" onClick={() => setIsSearchOpen(true)}>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-[15px] w-[15px] text-text-muted opacity-70 cursor-pointer group-hover:text-accent transition-colors" />
           <input
             type="text"
             readOnly
             placeholder="Search commands (⌘K)..."
-            className="h-9.5 w-60 rounded border border-white/[0.04] bg-[#0c0c0e] pl-10 pr-3 text-[13px] font-light text-text-primary placeholder:text-text-muted/70 focus:outline-none focus:border-accent/30 cursor-text transition-colors"
+            className="h-9.5 w-full rounded-md border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] pl-10 pr-3 text-[13px] font-light text-text-primary placeholder:text-text-muted/70 focus:outline-none focus:border-accent/30 cursor-text transition-all shadow-sm"
           />
-          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-text-muted font-mono bg-white/[0.03] border border-white/[0.04] px-1.5 py-0.5 rounded leading-none pointer-events-none">
+          <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-text-muted font-mono bg-white/[0.05] border border-white/[0.08] px-1.5 py-0.5 rounded leading-none pointer-events-none">
             ⌘K
           </kbd>
         </div>
+      </div>
 
+      {/* Right Side */}
+      <div className="flex items-center gap-3 z-10">
         {/* Notifications */}
         <div className="relative" ref={notifsRef}>
           <button 
@@ -147,9 +149,9 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 transition={{ duration: 0.15 }}
-                className="absolute right-0 top-full mt-2 w-80 rounded-xl border border-white/[0.06] bg-[#09090b] shadow-2xl overflow-hidden z-50 glass-tactical"
+                className="absolute right-0 top-full mt-2 w-80 rounded-xl border border-white/[0.08] bg-[#09090b]/80 backdrop-blur-xl shadow-2xl overflow-hidden z-50"
               >
-                <div className="p-4 border-b border-white/[0.04] flex items-center justify-between bg-[#0c0c0e]">
+                <div className="p-4 border-b border-white/[0.04] flex items-center justify-between bg-white/[0.02]">
                   <h3 className="text-[13px] font-medium text-text-primary tracking-tight">Notifications</h3>
                   <span className="text-[10px] text-accent px-2 py-0.5 rounded bg-accent/10 border border-accent/20">3 New</span>
                 </div>
@@ -167,7 +169,7 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
                     </div>
                   ))}
                 </div>
-                <div className="p-3 text-center border-t border-white/[0.04] bg-[#0c0c0e]">
+                <div className="p-3 text-center border-t border-white/[0.04] bg-white/[0.02]">
                   <button className="text-[11.5px] text-text-muted hover:text-text-primary transition-colors">Mark all as read</button>
                 </div>
               </motion.div>
@@ -205,9 +207,9 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ duration: 0.15 }}
-              className="fixed left-1/2 top-[15vh] z-[101] w-full max-w-xl -translate-x-1/2 rounded-xl border border-white/[0.08] bg-[#09090b] shadow-2xl overflow-hidden glass-tactical font-sans antialiased"
+              className="fixed left-1/2 top-[15vh] z-[101] w-full max-w-xl -translate-x-1/2 rounded-xl border border-white/[0.08] bg-[#09090b]/80 backdrop-blur-xl shadow-2xl overflow-hidden font-sans antialiased"
             >
-              <div className="relative flex items-center px-4 py-3 border-b border-white/[0.06]">
+              <div className="relative flex items-center px-4 py-3 border-b border-white/[0.06] bg-white/[0.02]">
                 <Search className="h-5 w-5 text-text-muted shrink-0" />
                 <input
                   type="text"
@@ -259,7 +261,7 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
                 )}
               </div>
 
-              <div className="px-4 py-3 border-t border-white/[0.04] bg-[#0c0c0e] flex items-center justify-between">
+              <div className="px-4 py-3 border-t border-white/[0.04] bg-white/[0.02] flex items-center justify-between">
                 <div className="flex items-center gap-4 text-[11px] text-text-muted">
                   <span className="flex items-center gap-1.5">
                     <kbd className="px-1.5 py-0.5 rounded border border-white/[0.06] bg-white/[0.02] font-mono">↑↓</kbd>
