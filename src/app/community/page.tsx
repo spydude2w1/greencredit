@@ -16,6 +16,7 @@ import {
   MessageSquare,
   Search,
   ShoppingCart,
+  Plane,
   Home,
   Crown
 } from "lucide-react";
