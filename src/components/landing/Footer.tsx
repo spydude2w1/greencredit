@@ -19,6 +19,7 @@ const learnLinks = [
   { label: "Guides", href: "/learn/guides" },
   { label: "Insights", href: "/learn/insights" },
   { label: "Case Studies", href: "/learn/case-studies" },
+  { label: "Research Paper", href: "/researchpaper" },
   { label: "Sustainability 101", href: "/learn/sustainability-101" },
 ];
 

@@ -115,8 +115,8 @@ const resourceLinks: LinkItem[] = [
   { title: 'Compliance Tools', href: '/enterprise/compliance', icon: Shield },
   { title: 'Greenwash Detector', href: '/tools/greenwash-detector', icon: Cpu },
   { title: 'Sustainability Hub', href: '/community', icon: Globe },
+  { title: 'Research Paper', href: '/researchpaper', icon: FileText },
   { title: 'Help Center', href: '#', icon: HelpCircle },
-  { title: 'Platform Status', href: '#', icon: Star },
 ];
 
 /* ─── Spring Configs ─── */
