@@ -105,10 +105,10 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
               </div>
               <div>
                 <h2 className="text-[13.5px] font-normal text-text-primary flex items-center gap-1.5 tracking-tight leading-none">
-                  EcoBot Agent OS Link
+                  EcoBot Agent OS
                   <Zap className="h-3.5 w-3.5 text-accent animate-pulse" />
                 </h2>
-                <p className="text-[11px] text-text-muted font-light mt-1.5">Direct Agent Communication Console</p>
+                <p className="text-[11px] text-text-muted font-light mt-1.5">Quick Mission Console</p>
               </div>
             </div>
             <button
@@ -194,7 +194,7 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask EcoBot anything..."
+                placeholder="Assign a quick mission..."
                 disabled={isTyping}
                 className="flex-1 h-10 rounded bg-[#09090b] border border-white/[0.06] px-4.5 text-[13.5px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent/30 transition-colors disabled:opacity-50 font-light"
               />
