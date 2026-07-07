@@ -92,7 +92,7 @@ export default function EcoBotPanel({ isOpen, onClose }: EcoBotPanelProps) {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: "100%", opacity: 0 }}
           transition={{ type: "spring", stiffness: 320, damping: 28 }}
-          className="fixed right-0 top-0 z-50 h-screen w-[440px] max-w-full flex flex-col border-l border-white/[0.03] bg-[#0c0c0e]"
+          className="fixed right-0 top-0 z-50 h-[100dvh] w-full sm:w-[440px] flex flex-col border-l border-white/[0.03] bg-[#0c0c0e]"
         >
           {/* Header */}
           <div className="flex items-center justify-between h-18 px-6 border-b border-b-white/[0.02]">

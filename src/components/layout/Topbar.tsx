@@ -81,7 +81,7 @@ export default function Topbar({ sidebarCollapsed, onMobileToggle }: TopbarProps
 
   return (
     <header
-      className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-white/[0.03] bg-[#09090b]/80 backdrop-blur-xl px-6 transition-all duration-300 font-sans text-text-primary antialiased relative"
+      className="sticky top-0 z-30 flex h-[72px] items-center justify-between border-b border-white/[0.03] bg-[#09090b]/80 backdrop-blur-xl px-4 md:px-6 transition-all duration-300 font-sans text-text-primary antialiased relative"
     >
       {/* Mobile Toggle & Breadcrumbs */}
       <div className="flex items-center gap-3 z-10">

@@ -14,7 +14,7 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
   const [ecobotOpen, setEcobotOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background font-sans antialiased text-text-primary">
+    <div className="min-h-[100dvh] bg-background font-sans antialiased text-text-primary">
       <Sidebar
         collapsed={sidebarCollapsed}
         mobileOpen={mobileOpen}
@@ -30,12 +30,12 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
           onClick={() => setMobileOpen(false)}
         />
       )}
-      <div className={cn("flex flex-col min-h-screen transition-all duration-300", sidebarCollapsed ? "md:ml-[80px]" : "md:ml-[288px]")}>
+      <div className={cn("flex flex-col min-h-[100dvh] transition-all duration-300", sidebarCollapsed ? "md:ml-[80px]" : "md:ml-[288px]")}>
         <Topbar 
           sidebarCollapsed={sidebarCollapsed} 
           onMobileToggle={() => setMobileOpen(!mobileOpen)} 
         />
-        <main className="flex-1 p-8 w-full max-w-full overflow-x-hidden">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full max-w-full overflow-x-hidden">
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
             {children}
           </motion.div>

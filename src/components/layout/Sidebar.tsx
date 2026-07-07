@@ -49,7 +49,7 @@ export default function Sidebar({ collapsed, onToggle, onEcoBotToggle, sections,
       animate={{ width: collapsed ? 80 : 288 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
-        "fixed left-0 top-0 z-50 h-screen flex flex-col border-r border-white/[0.03] bg-[#0c0c0e] overflow-hidden transition-transform md:translate-x-0",
+        "fixed left-0 top-0 z-50 h-[100dvh] flex flex-col border-r border-white/[0.03] bg-[#0c0c0e] overflow-hidden transition-transform md:translate-x-0",
         mobileOpen ? "translate-x-0" : "-translate-x-full"
       )}
     >
